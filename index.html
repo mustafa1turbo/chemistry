@@ -1,496 +1,301 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🧪 منصة الكيمياء التعليمية | أ/ محمد السيد</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>منصة العباقرة | الكيمياء</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        * { 
-            font-family: 'Cairo', sans-serif; 
-            -webkit-tap-highlight-color: transparent;
-            box-sizing: border-box;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
         body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
             overflow-x: hidden;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
         }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            min-height: 100vh;
-        }
-        
-        .card-glow {
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        
-        .card-glow:hover {
-            box-shadow: 0 0 50px rgba(99, 102, 241, 0.4);
-            transform: translateY(-5px);
-        }
-        
-        .floating {
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .pulse-glow {
-            animation: pulseGlow 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8); }
-        }
-        
-        .lesson-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .lesson-card:hover {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            border-color: rgba(99, 102, 241, 0.5);
-            transform: translateY(-5px);
-        }
-        
-        .lesson-card.active {
-            border-color: #fbbf24;
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
-        }
-        
-        .lesson-card.locked {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .teacher-avatar {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
-        }
-        
-        .speech-bubble {
-            position: relative;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            border-radius: 20px;
-        }
-        
-        .speech-bubble::after {
-            content: '';
-            position: absolute;
-            right: -12px;
-            top: 20px;
-            border: 12px solid transparent;
-            border-left-color: #6366f1;
-        }
-        
-        @media (max-width: 640px) {
-            .speech-bubble::after {
-                display: none;
-            }
-        }
-        
-        .bounce-in {
-            animation: bounceIn 0.6s ease-out;
-        }
-        
-        @keyframes bounceIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        .slide-up {
-            animation: slideUp 0.5s ease-out;
-        }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
+
         /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
-            height: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 4px;
+            background: #1e293b;
         }
-        
+
         ::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.5);
+            background: #4f46e5;
             border-radius: 4px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.7);
+            background: #4338ca;
         }
-        
-        .stats-card {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-            border: 1px solid rgba(99, 102, 241, 0.2);
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 1rem;
         }
-        
-        .chapter-badge {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+
+        .lesson-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
-        
-        .coming-soon {
-            background: linear-gradient(135deg, rgba(156, 163, 175, 0.1) 0%, rgba(107, 114, 128, 0.1) 100%);
-            border: 1px dashed rgba(156, 163, 175, 0.3);
+
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.2);
+        }
+
+        .lesson-card.locked {
+            filter: grayscale(1);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .floating-icon {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+
+        .teacher-bubble {
+            position: relative;
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            border-radius: 1rem;
+            border-bottom-right-radius: 0;
         }
     </style>
 </head>
-<body class="gradient-bg text-white">
-    <!-- Main Platform Page -->
-    <div id="platform-home">
-        <!-- Header -->
-        <header class="py-6 px-4 border-b border-white/10">
-            <div class="container mx-auto max-w-6xl">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="text-4xl sm:text-5xl floating">⚗️</div>
-                        <div>
-                            <h1 class="text-xl sm:text-2xl font-black text-yellow-400">منصة الكيمياء</h1>
-                            <p class="text-xs sm:text-sm text-gray-400">مع مصطفى هاني 👨‍🏫</p>
-                        </div>
-                    </div>
-                    <div class="hidden sm:flex items-center gap-2 bg-white/5 rounded-full px-4 py-2">
-                        <span class="text-yellow-400">🎓</span>
-                        <span class="text-sm">الصف الثاني الثانوي</span>
-                    </div>
+
+<body class="antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass-panel border-b-0 rounded-none mb-12">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xl shadow-lg shadow-indigo-500/20">
+                    ⚡
+                </div>
+                <div>
+                    <h1
+                        class="text-2xl font-black bg-gradient-to-r from-indigo-200 to-cyan-200 bg-clip-text text-transparent">
+                        منصة العباقرة
+                    </h1>
+                    <span class="text-xs text-slate-400 font-bold tracking-wider">CHEMISTRY PLATFORM</span>
                 </div>
             </div>
-        </header>
+
+            <div
+                class="hidden md:flex items-center gap-2 bg-slate-800/50 rounded-full px-4 py-2 border border-slate-700">
+                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <span class="text-sm font-bold text-slate-300">الصف الثاني الثانوي</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 max-w-6xl pb-20">
 
         <!-- Hero Section -->
-        <section class="py-8 sm:py-16 px-4">
-            <div class="container mx-auto max-w-6xl">
-                <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-                    <!-- Welcome Message -->
-                    <div class="flex-1 text-center lg:text-right">
-                        <div class="bounce-in">
-                            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black mb-4 leading-tight">
-                                أهلاً بيك في 
-                                <span class="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
-                                    منصة الكيمياء! 🧪
-                                </span>
-                            </h2>
-                            <p class="text-gray-300 text-base sm:text-lg mb-6 leading-relaxed">
-                                هنا هتلاقي شرح مبسط لكل دروس الكيمياء بالمصري، مع رسومات توضيحية 
-                                وأسئلة تفاعلية تخليك تفهم مش تحفظ! 💪
-                            </p>
-                        </div>
-                        
-                        <!-- Stats -->
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8">
-                            <div class="stats-card rounded-xl p-3 sm:p-4 slide-up" style="animation-delay: 0.1s">
-                                <div class="text-2xl sm:text-3xl mb-1">📚</div>
-                                <div class="text-xl sm:text-2xl font-bold text-yellow-400">2</div>
-                                <div class="text-xs text-gray-400">درس متاح حالياً</div>
-                            </div>
-                            <div class="stats-card rounded-xl p-3 sm:p-4 slide-up" style="animation-delay: 0.2s">
-                                <div class="text-2xl sm:text-3xl mb-1">❓</div>
-                                <div class="text-xl sm:text-2xl font-bold text-green-400">80+</div>
-                                <div class="text-xs text-gray-400">سؤال تفاعلي</div>
-                            </div>
-                            <div class="stats-card rounded-xl p-3 sm:p-4 slide-up" style="animation-delay: 0.3s">
-                                <div class="text-2xl sm:text-3xl mb-1">🎨</div>
-                                <div class="text-xs text-gray-400">رسومات متحركة</div>
-                                <div class="text-xl sm:text-2xl font-bold text-pink-400">✓</div>
-                            </div>
-                            <div class="stats-card rounded-xl p-3 sm:p-4 slide-up" style="animation-delay: 0.4s">
-                                <div class="text-2xl sm:text-3xl mb-1">📱</div>
-                                <div class="text-xs text-gray-400">يعمل على الموبايل</div>
-                                <div class="text-xl sm:text-2xl font-bold text-blue-400">✓</div>
-                            </div>
+        <section class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+            <div class="space-y-6 text-center lg:text-right">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-bold mb-2">
+                    <span>🚀</span>
+                    <span>أقوى شرح لمنهج الكيمياء</span>
+                </div>
+
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight text-white">
+                    الكيمياء <br>
+                    <span
+                        class="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                        مش بس حفظ معادلات!
+                    </span>
+                </h2>
+
+                <p class="text-lg text-slate-400 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    استمتع بتجربة تعليمية مختلفة تماماً. شرح تفاعلي، رسومات متحركة، وامتحانات ذكية بتعرفك مستواك أول
+                    بأول.
+                    مع مستر <b>محمد السيد</b>، الكيمياء في جيبك! 😉
+                </p>
+
+                <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                    <div class="glass-panel px-6 py-3 flex items-center gap-3">
+                        <span class="text-2xl">📚</span>
+                        <div class="text-right">
+                            <div class="text-sm text-slate-400">محتوى</div>
+                            <div class="font-bold">تفاعلي بالكامل</div>
                         </div>
                     </div>
-                    
-                    <!-- Teacher Avatar -->
-                    <div class="flex-shrink-0 slide-up">
-                        <div class="relative">
-                            <div class="teacher-avatar w-32 h-32 sm:w-40 sm:h-40 rounded-full flex items-center justify-center text-6xl sm:text-7xl mx-auto">
-                                👨‍🏫
-                            </div>
-                            <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
-                                أ/ محمد السيد
-                            </div>
+                    <div class="glass-panel px-6 py-3 flex items-center gap-3">
+                        <span class="text-2xl">🏆</span>
+                        <div class="text-right">
+                            <div class="text-sm text-slate-400">نظام</div>
+                            <div class="font-bold">بينج بونج 🏓</div>
                         </div>
-                        <div class="speech-bubble p-4 mt-6 max-w-xs mx-auto text-sm">
-                            <p>يلا نذاكر مع بعض ونفهم الكيمياء صح! 🚀</p>
-                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avatar / Graphic -->
+            <div class="relative hidden lg:block">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 blur-3xl rounded-full">
+                </div>
+                <div class="relative flex flex-col items-center">
+                    <div
+                        class="w-64 h-64 rounded-full bg-gradient-to-b from-slate-700 to-slate-900 border-4 border-slate-700 shadow-2xl flex items-center justify-center text-8xl mb-8 relative z-10 floating-icon">
+                        👨‍🏫
+                    </div>
+                    <div class="teacher-bubble p-6 max-w-xs text-center shadow-xl transform rotate-2">
+                        <p class="font-bold text-white text-lg mb-1">جاهز يا بطل؟ 💪</p>
+                        <p class="text-indigo-100 text-sm">اختار درسك وابدأ رحلة التفوق!</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Lessons Section -->
-        <section class="py-8 sm:py-12 px-4">
-            <div class="container mx-auto max-w-6xl">
-                <div class="text-center mb-8">
-                    <h3 class="text-2xl sm:text-3xl font-bold mb-2">📚 الدروس المتاحة</h3>
-                    <p class="text-gray-400">اختار الدرس اللي عايز تذاكره</p>
-                </div>
-                
-                <!-- Chapter 1: الحساب الكيميائي -->
-                <div class="mb-8">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="chapter-badge px-4 py-2 rounded-full text-sm font-bold">
-                            📖 الباب الأول
+        <!-- Lessons Grid -->
+        <section>
+            <div class="flex items-center justify-between mb-8 px-2">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <span class="text-indigo-500">📑</span> الدروس المتاحة
+                </h3>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Lesson 1 -->
+                <a href="lesson-chemical-equation.html" class="glass-panel lesson-card p-6 block group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-3xl shadow-lg shadow-pink-500/20 group-hover:scale-110 transition">
+                            ⚖️
                         </div>
-                        <span class="text-gray-400 text-sm">الحساب الكيميائي</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-bold border border-green-500/20">
+                            متاح الآن
+                        </span>
                     </div>
-                    
-                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- تمهيد الباب - المعادلة الكيميائية (متاح!) -->
-                        <div class="lesson-card active rounded-2xl p-5 cursor-pointer" onclick="openLesson('chemical-equation')">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl">
-                                    ⚖️
-                                </div>
-                                <span class="bg-green-500/20 text-green-400 text-xs px-3 py-1 rounded-full font-bold">
-                                    ✓ متاح
-                                </span>
-                            </div>
-                            <h4 class="text-lg font-bold mb-2">المعادلة الكيميائية</h4>
-                            <p class="text-gray-400 text-sm mb-4">شروط الكتابة • وزن المعادلات • أنواع التفاعلات</p>
-                            <div class="flex items-center justify-between text-xs text-gray-500">
-                                <span>📖 4 أجزاء</span>
-                                <span>❓ 36+ سؤال</span>
-                                <span>⏱️ 30 دقيقة</span>
-                            </div>
-                            <button class="w-full mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-black py-3 rounded-xl font-bold hover:scale-[1.02] transition pulse-glow">
-                                ابدأ المذاكرة 🚀
-                            </button>
+                    <h4 class="text-xl font-bold text-white mb-2 group-hover:text-pink-400 transition">المعادلة
+                        الكيميائية</h4>
+                    <p class="text-slate-400 text-sm mb-6 line-clamp-2">ازاي تكتب معادلة وتوزنها صح؟ وايه هي شروط
+                        التفاعل؟ أساسيات لا غنى عنها!</p>
+
+                    <div class="flex items-center gap-4 text-xs font-bold text-slate-500">
+                        <div class="flex items-center gap-1"><span class="text-pink-400">4</span> أجزاء</div>
+                        <div class="flex items-center gap-1"><span class="text-pink-400">36</span> سؤال</div>
+                    </div>
+                    <div
+                        class="mt-6 w-full py-3 rounded-xl bg-slate-800 group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-rose-600 font-bold text-center transition-all group-hover:shadow-lg group-hover:shadow-pink-500/25">
+                        ابدأ المذاكرة 🚀
+                    </div>
+                </a>
+
+                <!-- Lesson 2 (Upgraded) -->
+                <a href="lesson-periodic-properties.html" class="glass-panel lesson-card p-6 block group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-3xl shadow-lg shadow-purple-500/20 group-hover:scale-110 transition">
+                            ⚡
                         </div>
-                        
-                        <!-- الدرس الأول - المول -->
-                        <div class="lesson-card coming-soon locked rounded-2xl p-5">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center text-2xl">
-                                    🔢
-                                </div>
-                                <span class="bg-gray-500/20 text-gray-400 text-xs px-3 py-1 rounded-full font-bold">
-                                    🔒 قريباً
-                                </span>
-                            </div>
-                            <h4 class="text-lg font-bold mb-2 text-gray-400">المول</h4>
-                            <p class="text-gray-500 text-sm mb-4">عدد أفوجادرو • حجم الغاز • المادة المحددة</p>
-                            <div class="flex items-center justify-between text-xs text-gray-600">
-                                <span>📖 4 أجزاء</span>
-                                <span>❓ 60+ سؤال</span>
-                                <span>⏱️ 50 دقيقة</span>
-                            </div>
-                            <button class="w-full mt-4 bg-gray-700 text-gray-400 py-3 rounded-xl font-bold cursor-not-allowed">
-                                قريباً إن شاء الله 🔜
-                            </button>
+                        <span
+                            class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-bold border border-green-500/20">
+                            متاح الآن
+                        </span>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition">الخواص الدورية
+                    </h4>
+                    <p class="text-slate-400 text-sm mb-6 line-clamp-2">نص القطر، الفلزية واللافلزية، والحامضية
+                        والقاعدية. كل ده مرتبط ببعضه!</p>
+
+                    <div class="flex items-center gap-4 text-xs font-bold text-slate-500">
+                        <div class="flex items-center gap-1"><span class="text-purple-400">4</span> خواص</div>
+                        <div class="flex items-center gap-1"><span class="text-purple-400">80</span> سؤال</div>
+                    </div>
+                    <div
+                        class="mt-6 w-full py-3 rounded-xl bg-slate-800 group-hover:bg-gradient-to-r group-hover:from-purple-500 group-hover:to-indigo-600 font-bold text-center transition-all group-hover:shadow-lg group-hover:shadow-purple-500/25">
+                        ابدأ المذاكرة 🚀
+                    </div>
+                </a>
+
+                <!-- Lesson 3 (Locked) -->
+                <div class="glass-panel lesson-card locked p-6 block">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 rounded-2xl bg-slate-700 flex items-center justify-center text-3xl">
+                            🔢
                         </div>
-                        
-                        <!-- الدرس الثاني -->
-                        <div class="lesson-card coming-soon locked rounded-2xl p-5">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center text-2xl">
-                                    💧
-                                </div>
-                                <span class="bg-gray-500/20 text-gray-400 text-xs px-3 py-1 rounded-full font-bold">
-                                    🔒 قريباً
-                                </span>
-                            </div>
-                            <h4 class="text-lg font-bold mb-2 text-gray-400">المحاليل</h4>
-                            <p class="text-gray-500 text-sm mb-4">التركيز • المولارية • التخفيف</p>
-                            <div class="flex items-center justify-between text-xs text-gray-600">
-                                <span>📖 3 أجزاء</span>
-                                <span>❓ 50+ سؤال</span>
-                                <span>⏱️ 45 دقيقة</span>
-                            </div>
-                            <button class="w-full mt-4 bg-gray-700 text-gray-400 py-3 rounded-xl font-bold cursor-not-allowed">
-                                قريباً إن شاء الله 🔜
-                            </button>
-                        </div>
+                        <span
+                            class="px-3 py-1 rounded-full bg-slate-700 text-slate-400 text-xs font-bold border border-slate-600">
+                            قريباً
+                        </span>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-500 mb-2">المول والمعادلات</h4>
+                    <p class="text-slate-600 text-sm mb-6">الحساب الكيميائي، عدد أفوجادرو، والمادة المحددة للتفاعل.</p>
+
+                    <div
+                        class="mt-6 w-full py-3 rounded-xl bg-slate-800/50 text-slate-600 font-bold text-center border border-slate-700 border-dashed">
+                        قريباً... 🔒
                     </div>
                 </div>
-                
-                <!-- Chapter 2: الروابط الكيميائية -->
-                <div class="mb-8">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="chapter-badge px-4 py-2 rounded-full text-sm font-bold" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                            📖 الباب الثاني
+
+                <!-- Lesson 4 (Locked) -->
+                <div class="glass-panel lesson-card locked p-6 block">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 rounded-2xl bg-slate-700 flex items-center justify-center text-3xl">
+                            🧬
                         </div>
-                        <span class="text-gray-400 text-sm">الروابط الكيميائية</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-slate-700 text-slate-400 text-xs font-bold border border-slate-600">
+                            قريباً
+                        </span>
                     </div>
-                    
-                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- الرابطة الأيونية -->
-                        <div class="lesson-card coming-soon locked rounded-2xl p-5">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center text-2xl">
-                                    🔗
-                                </div>
-                                <span class="bg-gray-500/20 text-gray-400 text-xs px-3 py-1 rounded-full font-bold">
-                                    🔒 قريباً
-                                </span>
-                            </div>
-                            <h4 class="text-lg font-bold mb-2 text-gray-400">الرابطة الأيونية</h4>
-                            <p class="text-gray-500 text-sm mb-4">تكوين الأيونات • البلورات • الخواص</p>
-                            <div class="flex items-center justify-between text-xs text-gray-600">
-                                <span>📖 3 أجزاء</span>
-                                <span>❓ 40+ سؤال</span>
-                                <span>⏱️ 40 دقيقة</span>
-                            </div>
-                            <button class="w-full mt-4 bg-gray-700 text-gray-400 py-3 rounded-xl font-bold cursor-not-allowed">
-                                قريباً إن شاء الله 🔜
-                            </button>
-                        </div>
-                        
-                        <!-- الرابطة التساهمية -->
-                        <div class="lesson-card coming-soon locked rounded-2xl p-5">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center text-2xl">
-                                    🧬
-                                </div>
-                                <span class="bg-gray-500/20 text-gray-400 text-xs px-3 py-1 rounded-full font-bold">
-                                    🔒 قريباً
-                                </span>
-                            </div>
-                            <h4 class="text-lg font-bold mb-2 text-gray-400">الرابطة التساهمية</h4>
-                            <p class="text-gray-500 text-sm mb-4">المشاركة • القطبية • التهجين</p>
-                            <div class="flex items-center justify-between text-xs text-gray-600">
-                                <span>📖 5 أجزاء</span>
-                                <span>❓ 70+ سؤال</span>
-                                <span>⏱️ 55 دقيقة</span>
-                            </div>
-                            <button class="w-full mt-4 bg-gray-700 text-gray-400 py-3 rounded-xl font-bold cursor-not-allowed">
-                                قريباً إن شاء الله 🔜
-                            </button>
-                        </div>
+                    <h4 class="text-xl font-bold text-slate-500 mb-2">الروابط الكيميائية</h4>
+                    <p class="text-slate-600 text-sm mb-6">الرابطة الأيونية والتساهمية، التهجين، والأشكال الفراغية.</p>
+
+                    <div
+                        class="mt-6 w-full py-3 rounded-xl bg-slate-800/50 text-slate-600 font-bold text-center border border-slate-700 border-dashed">
+                        قريباً... 🔒
                     </div>
                 </div>
-                
-                <!-- Chapter 3: الجدول الدوري الحديث -->
-                <div class="mb-8">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="chapter-badge px-4 py-2 rounded-full text-sm font-bold" style="background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);">
-                            📖 الباب الثالث
-                        </div>
-                        <span class="text-gray-400 text-sm">الجدول الدوري الحديث</span>
-                    </div>
-                    
-                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- الدرس الثالث - الخواص الدورية (متاح) -->
-                        <div class="lesson-card active rounded-2xl p-5 cursor-pointer" onclick="openLesson('periodic-properties')">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-2xl">
-                                    ⚡
-                                </div>
-                                <span class="bg-green-500/20 text-green-400 text-xs px-3 py-1 rounded-full font-bold">
-                                    ✓ متاح
-                                </span>
-                            </div>
-                            <h4 class="text-lg font-bold mb-2">الخواص الدورية للعناصر</h4>
-                            <p class="text-gray-400 text-sm mb-4">الفلزية • اللافلزية • الحامضية • القاعدية</p>
-                            <div class="flex items-center justify-between text-xs text-gray-500">
-                                <span>📖 4 أجزاء</span>
-                                <span>❓ 80+ سؤال</span>
-                                <span>⏱️ 60 دقيقة</span>
-                            </div>
-                            <button class="w-full mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-black py-3 rounded-xl font-bold hover:scale-[1.02] transition pulse-glow">
-                                ابدأ المذاكرة 🚀
-                            </button>
-                        </div>
-                        
-                        <!-- التوزيع الإلكتروني -->
-                        <div class="lesson-card coming-soon locked rounded-2xl p-5">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center text-2xl">
-                                    ⚛️
-                                </div>
-                                <span class="bg-gray-500/20 text-gray-400 text-xs px-3 py-1 rounded-full font-bold">
-                                    🔒 قريباً
-                                </span>
-                            </div>
-                            <h4 class="text-lg font-bold mb-2 text-gray-400">التوزيع الإلكتروني</h4>
-                            <p class="text-gray-500 text-sm mb-4">أعداد الكم • قواعد التوزيع • الحالة المستقرة</p>
-                            <div class="flex items-center justify-between text-xs text-gray-600">
-                                <span>📖 4 أجزاء</span>
-                                <span>❓ 60+ سؤال</span>
-                                <span>⏱️ 50 دقيقة</span>
-                            </div>
-                            <button class="w-full mt-4 bg-gray-700 text-gray-400 py-3 rounded-xl font-bold cursor-not-allowed">
-                                قريباً إن شاء الله 🔜
-                            </button>
-                        </div>
-                        
-                        <!-- نظرية بور -->
-                        <div class="lesson-card coming-soon locked rounded-2xl p-5">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center text-2xl">
-                                    🔬
-                                </div>
-                                <span class="bg-gray-500/20 text-gray-400 text-xs px-3 py-1 rounded-full font-bold">
-                                    🔒 قريباً
-                                </span>
-                            </div>
-                            <h4 class="text-lg font-bold mb-2 text-gray-400">نظرية بور والأطياف</h4>
-                            <p class="text-gray-500 text-sm mb-4">الطيف الذري • مستويات الطاقة • الانتقالات</p>
-                            <div class="flex items-center justify-between text-xs text-gray-600">
-                                <span>📖 3 أجزاء</span>
-                                <span>❓ 50+ سؤال</span>
-                                <span>⏱️ 45 دقيقة</span>
-                            </div>
-                            <button class="w-full mt-4 bg-gray-700 text-gray-400 py-3 rounded-xl font-bold cursor-not-allowed">
-                                قريباً إن شاء الله 🔜
-                            </button>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="py-8 px-4 bg-black/30 border-t border-white/10">
-            <div class="container mx-auto max-w-6xl text-center">
-                <div class="flex justify-center gap-4 mb-4">
-                    <span class="text-2xl floating" style="animation-delay: 0s">⚗️</span>
-                    <span class="text-2xl floating" style="animation-delay: 0.2s">🔬</span>
-                    <span class="text-2xl floating" style="animation-delay: 0.4s">🧬</span>
-                    <span class="text-2xl floating" style="animation-delay: 0.6s">⚡</span>
-                </div>
-                <p class="text-yellow-400 font-bold mb-1">منصة الكيمياء مع مصطفى هاني 👨‍🏫</p>
-                <p class="text-gray-500 text-sm">ذاكر صح.. وافهم مش تحفظ! 💪</p>
-            </div>
-        </footer>
-    </div>
+    </main>
 
-    <!-- Lesson Content (Hidden by default) -->
-    <div id="lesson-content" class="hidden">
-        <!-- Will be loaded dynamically -->
-    </div>
+    <!-- Footer -->
+    <footer class="glass-panel rounded-none border-x-0 border-b-0 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-xl font-bold text-slate-200 mb-2">منصة العباقرة</h3>
+            <p class="text-slate-500 text-sm">جميع الحقوق محفوظة © 2024</p>
+        </div>
+    </footer>
 
-    <script>
-        function openLesson(lessonId) {
-            if (lessonId === 'periodic-properties') {
-                window.location.href = 'lesson-periodic-properties.html';
-            } else if (lessonId === 'chemical-equation') {
-                window.location.href = 'lesson-chemical-equation.html';
-            }
-        }
-    </script>
 </body>
+
 </html>
