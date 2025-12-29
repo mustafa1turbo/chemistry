@@ -1,1170 +1,509 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>المعادلة الكيميائية | منصة الكيمياء</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>المعادلة الكيميائية | منصة العباقرة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        * { 
-            font-family: 'Cairo', sans-serif; 
-            -webkit-tap-highlight-color: transparent;
-            box-sizing: border-box;
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
         }
-        
-        html { scroll-behavior: smooth; }
-        body { overflow-x: hidden; }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            min-height: 100vh;
-        }
-        
+
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-        ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.5); border-radius: 3px; }
-        
-        /* Cards */
-        .glass-card {
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4338ca;
+        }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 1rem;
+        }
+
+        /* Chat/Dialogue System */
+        .chat-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .student-row {
+            flex-direction: row-reverse;
+        }
+
+        .chat-avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: #334155;
+            border: 2px solid #64748b;
+            flex-shrink: 0;
+        }
+
+        .student-row .chat-avatar {
+            background: #0f172a;
+            border-color: #fbbf24;
+            /* Warning/Yellow */
+        }
+
+        .chat-bubble {
+            background: #1e293b;
+            padding: 1rem;
+            border-radius: 1rem;
+            border-top-right-radius: 0;
+            max-width: 80%;
+            border: 1px solid #334155;
+            position: relative;
+        }
+
+        .student-row .chat-bubble {
+            background: #3f3f46;
+            /* Zinc 700ish */
+            border-top-left-radius: 0;
+            border-top-right-radius: 1rem;
+            color: #fbbf24;
+            border-color: #fbbf24;
+        }
+
+        /* Pedagogical Boxes */
+        .trick-box {
+            background: rgba(127, 29, 29, 0.3);
+            /* Red 900 */
+            border-right: 4px solid #ef4444;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
         .concept-card {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
             border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 1rem;
+            padding: 1.5rem;
         }
-        
-        .warning-card {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(251, 191, 36, 0.1) 100%);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-        
-        .success-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-        
-        /* Diagram Container */
-        .diagram-container {
-            background: rgba(0,0,0,0.3);
-            border-radius: 20px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        
-        /* Reaction Animation */
-        @keyframes reactantMove {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(10px); }
-        }
-        
-        @keyframes productAppear {
-            0% { opacity: 0; transform: scale(0.5); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes arrowPulse {
-            0%, 100% { opacity: 1; transform: scaleX(1); }
-            50% { opacity: 0.7; transform: scaleX(1.1); }
-        }
-        
-        .reactant-animate {
-            animation: reactantMove 2s ease-in-out infinite;
-        }
-        
-        .product-animate {
-            animation: productAppear 2s ease-out infinite;
-        }
-        
-        .arrow-animate {
-            animation: arrowPulse 1.5s ease-in-out infinite;
-        }
-        
-        /* Molecule styles */
-        .molecule {
-            display: inline-flex;
-            align-items: center;
-            gap: 2px;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-weight: bold;
-        }
-        
-        .atom-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        
-        /* Quiz styles */
-        .quiz-option {
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-        
-        .quiz-option:hover {
-            border-color: rgba(99, 102, 241, 0.5);
-            background: rgba(99, 102, 241, 0.1);
-        }
-        
-        .quiz-option.selected {
-            border-color: #6366f1;
-            background: rgba(99, 102, 241, 0.2);
-        }
-        
-        .quiz-option.correct {
-            border-color: #10b981;
-            background: rgba(16, 185, 129, 0.2);
-        }
-        
-        .quiz-option.wrong {
-            border-color: #ef4444;
-            background: rgba(239, 68, 68, 0.2);
-        }
-        
-        /* Progress bar */
-        .progress-bar {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+
+        .sc-box {
+            position: relative;
+            padding: 1.5rem;
+            border-radius: 1rem;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
         }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            transition: width 0.5s ease;
+
+        /* Animations */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
-        
-        /* Floating animation */
-        .floating {
+
+        .animate-float {
             animation: float 3s ease-in-out infinite;
         }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
         }
-        
-        /* Pulse */
-        .pulse-glow {
-            animation: pulseGlow 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8); }
-        }
-        
-        /* Teacher bubble */
-        .teacher-bubble {
-            position: relative;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            border-radius: 20px;
-            padding: 15px 20px;
-        }
-        
-        .teacher-bubble::before {
-            content: '👨‍🏫';
-            position: absolute;
-            right: -50px;
-            top: 10px;
-            font-size: 35px;
-        }
-        
-        @media (max-width: 640px) {
-            .teacher-bubble::before {
-                display: none;
-            }
-        }
-        
-        /* Table responsive */
-        .table-container {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        /* Confetti */
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            top: -10px;
-            z-index: 1000;
-            animation: confetti-fall 3s linear forwards;
-        }
-        
-        @keyframes confetti-fall {
+
+        @keyframes slideIn {
             to {
-                top: 100vh;
-                transform: rotate(720deg);
+                opacity: 1;
+                transform: translateY(0);
             }
         }
-        
-        /* Step cards */
-        .step-card {
-            position: relative;
-            padding-right: 60px;
-        }
-        
-        .step-number {
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        /* Chemical equation display */
+
+        /* Chemistry Specific */
         .equation-box {
-            background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
-            border: 2px solid rgba(99, 102, 241, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            font-size: 1.2rem;
+            font-family: 'Courier New', monospace;
             direction: ltr;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #4f46e5;
+            margin: 0.5rem 0;
         }
-        
+
         .equation-box .arrow {
             color: #fbbf24;
             margin: 0 10px;
         }
-        
+
         .equation-box .plus {
             color: #60a5fa;
             margin: 0 8px;
         }
-        
+
         .equation-box .coefficient {
             color: #f472b6;
             font-weight: bold;
         }
-        
+
         .equation-box .element {
             color: #34d399;
         }
-        
+
         .equation-box .subscript {
             font-size: 0.8em;
             vertical-align: sub;
         }
+
+        /* Quiz Styles */
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+            @apply border border-slate-700 bg-slate-800/50 p-4 rounded-xl hover:bg-slate-700;
+        }
+
+        .quiz-option.selected {
+            @apply border-indigo-500 bg-indigo-500/10;
+        }
+
+        .quiz-option.correct {
+            @apply border-green-500 bg-green-500/20;
+        }
+
+        .quiz-option.wrong {
+            @apply border-red-500 bg-red-500/20;
+        }
     </style>
 </head>
-<body class="gradient-bg text-white">
+
+<body class="antialiased selection:bg-indigo-500 selection:text-white">
+
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-black/50 backdrop-blur-lg border-b border-white/10">
-        <div class="container mx-auto max-w-6xl px-4 py-3">
-            <div class="flex items-center justify-between">
-                <a href="index.html" class="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition">
-                    <span class="text-xl">←</span>
-                    <span class="text-sm font-bold">الرجوع للمنصة</span>
-                </a>
-                <div class="text-center">
-                    <h1 class="text-sm sm:text-base font-bold">المعادلة الكيميائية</h1>
-                    <p class="text-xs text-gray-400">تمهيد الباب الأول</p>
+    <header class="sticky top-0 z-50 glass-panel border-b-0 rounded-none mb-8">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="text-3xl animate-float">⚗️</div>
+                <div>
+                    <h1
+                        class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                        منصة العباقرة
+                    </h1>
+                    <span class="text-xs text-slate-400">الكيمياء | الصف الأول الثانوي</span>
                 </div>
-                <div class="text-2xl floating">⚗️</div>
             </div>
+            <a href="index.html"
+                class="px-4 py-2 rounded-full bg-slate-800 hover:bg-slate-700 border border-slate-600 text-sm transition flex items-center gap-2">
+                <span>🏠</span> الرئيسة
+            </a>
         </div>
         <!-- Progress Bar -->
-        <div class="progress-bar h-1">
-            <div id="reading-progress" class="progress-fill" style="width: 0%"></div>
+        <div class="h-1 bg-slate-800 w-full">
+            <div id="reading-progress"
+                class="h-full bg-gradient-to-r from-indigo-500 to-cyan-500 w-0 transition-all duration-300"></div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto max-w-4xl px-4 py-6">
-        
+    <main class="container mx-auto px-4 max-w-4xl pb-20">
+
         <!-- Intro Section -->
-        <section class="mb-8">
-            <div class="glass-card rounded-2xl p-6 mb-6">
-                <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
-                    <div class="text-6xl">⚖️</div>
-                    <div class="text-center sm:text-right">
-                        <h2 class="text-2xl sm:text-3xl font-black text-yellow-400 mb-2">المعادلة الكيميائية</h2>
-                        <p class="text-gray-300">يلا نفهم إزاي نكتب ونوزن المعادلات الكيميائية! ⚗️</p>
+        <section id="intro" class="mb-16">
+            <div class="text-center mb-12 slide-in">
+                <span
+                    class="inline-block px-3 py-1 rounded-full bg-indigo-900/50 text-indigo-300 text-sm border border-indigo-500/30 mb-4">
+                    الفصل الأول
+                </span>
+                <h2 class="text-4xl md:text-6xl font-black mb-4 leading-tight">
+                    المعادلة <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">الكيميائية</span>
+                </h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+                    لغة الكيمياء الموحدة! إزاي نعبر عن التفاعلات برموز بسيطة وموزونة؟ 🧠
+                </p>
+            </div>
+
+            <!-- Dialogue -->
+            <div class="max-w-3xl mx-auto mb-8">
+                <div class="chat-row teacher-row slide-in" style="animation-delay: 0.1s">
+                    <div class="chat-avatar">👨‍🏫</div>
+                    <div class="chat-bubble">
+                        <p class="font-bold text-indigo-300 mb-1">المستر:</p>
+                        <p>تخيل لو رحت مطعم وطلبت "ساندوتش"، الجرسون هيفهم إيه؟ 🤔 ولا حاجة! لازم تحدد "ساندوتش برجر"
+                            مثلاً.</p>
                     </div>
                 </div>
-                
-                <div class="teacher-bubble mb-6 mr-0 sm:mr-12">
-                    <p class="text-white">
-                        أهلاً بيك يا بطل! 👋 النهاردة هنتعلم حاجة مهمة جداً - 
-                        <strong class="text-yellow-300">المعادلة الكيميائية</strong>! 
-                        دي زي اللغة اللي الكيميائيين بيتكلموا بيها. يلا نبدأ! 💪
-                    </p>
+
+                <div class="chat-row student-row slide-in" style="animation-delay: 0.2s">
+                    <div class="chat-avatar">🧑‍🎓</div>
+                    <div class="chat-bubble">
+                        <p class="font-bold text-yellow-400 mb-1">الطالب:</p>
+                        <p>أكيد يا مستر! لازم أكون دقيق. بس إيه علاقة ده بالكيمياء؟ 🥪</p>
+                    </div>
                 </div>
-                
-                <!-- Quick Overview -->
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="bg-purple-500/20 rounded-xl p-3 text-center">
-                        <div class="text-2xl mb-1">📝</div>
-                        <div class="text-xs font-bold text-purple-400">شروط الكتابة</div>
-                    </div>
-                    <div class="bg-blue-500/20 rounded-xl p-3 text-center">
-                        <div class="text-2xl mb-1">⚖️</div>
-                        <div class="text-xs font-bold text-blue-400">وزن المعادلات</div>
-                    </div>
-                    <div class="bg-green-500/20 rounded-xl p-3 text-center">
-                        <div class="text-2xl mb-1">🔄</div>
-                        <div class="text-xs font-bold text-green-400">أنواع التفاعلات</div>
+
+                <div class="chat-row teacher-row slide-in" style="animation-delay: 0.3s">
+                    <div class="chat-avatar">👨‍🏫</div>
+                    <div class="chat-bubble">
+                        <p class="font-bold text-indigo-300 mb-1">المستر:</p>
+                        <p>بالضبط! 🎯 الكيمياء كمان لغة دقيقة. مينفعش نقول "حطينا شوية من ده على ده". لازم نستخدم
+                            <b>المعادلة الكيميائية</b> عشان نحدد المواد والكميات بالضبط. يلا بينا! 🚀</p>
                     </div>
                 </div>
             </div>
-            
-            <!-- Section Navigation -->
-            <div class="flex flex-wrap gap-2 justify-center mb-6">
-                <button onclick="scrollToSection('definition')" class="px-4 py-2 rounded-full bg-white/10 text-sm hover:bg-white/20 transition">
-                    1️⃣ التعريف
+
+            <!-- Nav Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button onclick="document.getElementById('definition').scrollIntoView({behavior:'smooth'})"
+                    class="p-4 rounded-xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700 transition text-center group">
+                    <div class="text-2xl mb-2 group-hover:scale-110 transition">📖</div>
+                    <div class="font-bold text-sm">التعريف</div>
                 </button>
-                <button onclick="scrollToSection('conditions')" class="px-4 py-2 rounded-full bg-white/10 text-sm hover:bg-white/20 transition">
-                    2️⃣ شروط الكتابة
+                <button onclick="document.getElementById('conditions').scrollIntoView({behavior:'smooth'})"
+                    class="p-4 rounded-xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700 transition text-center group">
+                    <div class="text-2xl mb-2 group-hover:scale-110 transition">📝</div>
+                    <div class="font-bold text-sm">الشروط</div>
                 </button>
-                <button onclick="scrollToSection('balancing')" class="px-4 py-2 rounded-full bg-white/10 text-sm hover:bg-white/20 transition">
-                    3️⃣ وزن المعادلات
+                <button onclick="document.getElementById('balancing').scrollIntoView({behavior:'smooth'})"
+                    class="p-4 rounded-xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700 transition text-center group">
+                    <div class="text-2xl mb-2 group-hover:scale-110 transition">⚖️</div>
+                    <div class="font-bold text-sm">الوزن</div>
                 </button>
-                <button onclick="scrollToSection('types')" class="px-4 py-2 rounded-full bg-white/10 text-sm hover:bg-white/20 transition">
-                    4️⃣ أنواع التفاعلات
-                </button>
-                <button onclick="scrollToSection('final-quiz')" class="px-4 py-2 rounded-full bg-yellow-500/20 text-sm text-yellow-400 hover:bg-yellow-500/30 transition">
-                    📝 الاختبار النهائي
+                <button onclick="document.getElementById('types').scrollIntoView({behavior:'smooth'})"
+                    class="p-4 rounded-xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700 transition text-center group">
+                    <div class="text-2xl mb-2 group-hover:scale-110 transition">🔄</div>
+                    <div class="font-bold text-sm">الأنواع</div>
                 </button>
             </div>
         </section>
 
-        <!-- ==================== SECTION 1: DEFINITION ==================== -->
-        <section id="definition" class="mb-12">
-            <div class="glass-card rounded-2xl p-6">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl">
-                        📖
+        <!-- Definition Section -->
+        <section id="definition" class="mb-16">
+            <h3 class="text-2xl font-bold text-indigo-400 mb-6 flex items-center gap-2">
+                <span class="text-3xl">1️⃣</span> ما هي المعادلة الكيميائية؟
+            </h3>
+
+            <div class="concept-card mb-6">
+                <p class="text-lg leading-relaxed mb-4">
+                    هي <strong class="text-yellow-400">لغة كيميائية مختصرة</strong> بتوصف التفاعل الكيميائي بدقة،
+                    باستخدام رموز وصيغ كيميائية.
+                </p>
+                <div class="bg-black/30 rounded-lg p-4 text-center border border-indigo-500/30">
+                    <p class="text-sm text-slate-400 mb-2">مثال لتفاعل تكوين الماء:</p>
+                    <div class="equation-box text-xl">
+                        <span class="element">2H₂</span> <span class="plus">+</span> <span class="element">O₂</span>
+                        <span class="arrow">→</span> <span class="element">2H₂O</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Visualization -->
+            <div class="glass-panel p-6 text-center">
+                <h4 class="font-bold text-purple-400 mb-4">🎬 المعمل الافتراضي</h4>
+                <div class="flex items-center justify-center gap-4 text-4xl mb-4">
+                    <div class="animate-bounce" style="animation-delay: 0s">💧</div>
+                    <div class="text-slate-600">+</div>
+                    <div class="animate-bounce" style="animation-delay: 0.2s">🔥</div>
+                    <div class="text-slate-600">→</div>
+                    <div class="animate-pulse">💥</div>
+                </div>
+                <p class="text-sm text-slate-400">المتفاعلات (على اليسار) بتتحول لنواتج (على اليمين)</p>
+            </div>
+        </section>
+
+        <!-- Conditions Section -->
+        <section id="conditions" class="mb-16">
+            <h3 class="text-2xl font-bold text-blue-400 mb-6 flex items-center gap-2">
+                <span class="text-3xl">2️⃣</span> شروط كتابة المعادلة
+            </h3>
+
+            <div class="grid gap-4 mb-8">
+                <div class="glass-panel p-4 flex gap-4 items-start">
+                    <div class="bg-blue-500/20 p-2 rounded-lg text-2xl">📝</div>
+                    <div>
+                        <h4 class="font-bold text-blue-300">الصيغ الصحيحة</h4>
+                        <p class="text-sm text-slate-300">لازم تكتب رمز العنصر أو صيغة المركب صح (التكافؤات!).</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-4 flex gap-4 items-start">
+                    <div class="bg-green-500/20 p-2 rounded-lg text-2xl">🌡️</div>
+                    <div>
+                        <h4 class="font-bold text-green-300">شروط التفاعل</h4>
+                        <p class="text-sm text-slate-300">حرارة (Δ)، ضغط (P)، أو عامل حفاز.. بيتكتبوا فوق السهم.</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-4 flex gap-4 items-start">
+                    <div class="bg-yellow-500/20 p-2 rounded-lg text-2xl">🧊</div>
+                    <div>
+                        <h4 class="font-bold text-yellow-300">الحالة الفيزيائية</h4>
+                        <p class="text-sm text-slate-300">
+                            <span class="text-yellow-400">(s)</span> صلب،
+                            <span class="text-blue-400">(l)</span> سائل،
+                            <span class="text-green-400">(g)</span> غاز،
+                            <span class="text-purple-400">(aq)</span> محلول.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trick Box -->
+            <div class="trick-box">
+                <h4 class="text-red-400 font-bold mb-2 flex items-center gap-2">⚠️ خد بالك من التريك ده!</h4>
+                <p class="text-sm text-slate-200">
+                    في عناصر دايماً بتيجي <strong>ثنائية الذرة</strong> لما تكون لوحدها (الغازات النشطة):
+                    <br>
+                    <span class="font-mono text-yellow-400">H₂, N₂, O₂, F₂, Cl₂, Br₂, I₂</span>
+                    <br>
+                    لو كتبت <span class="line-through text-red-500">O</span> لوحده في المعادلة... يبقى غلطت يا بطل! 😉
+                </p>
+            </div>
+
+            <!-- Quiz 1 -->
+            <div class="glass-panel p-6 mt-6 border-blue-500/30">
+                <h4 class="font-bold text-blue-400 mb-4">🧠 اختبر فهمك السريع</h4>
+                <div id="quiz-conditions"></div>
+            </div>
+        </section>
+
+        <!-- Balancing Section -->
+        <section id="balancing" class="mb-16">
+            <h3 class="text-2xl font-bold text-green-400 mb-6 flex items-center gap-2">
+                <span class="text-3xl">3️⃣</span> وزن المعادلات (الجزء الأهم!)
+            </h3>
+
+            <!-- Dialogue -->
+            <div class="chat-row student-row mb-6">
+                <div class="chat-avatar">🧑‍🎓</div>
+                <div class="chat-bubble">
+                    <p>يا مستر، الوزن ده بيلخبطني جداً! بفضل أجرب أرقام كتير ومبتظبطش. 🤯</p>
+                </div>
+            </div>
+            <div class="chat-row teacher-row mb-8">
+                <div class="chat-avatar">👨‍🏫</div>
+                <div class="chat-bubble">
+                    <p>ولا يهمك! السر كله في <b>"قانون البقاء"</b>. اللي داخل لازم يساوي اللي خارج.
+                        تعال نطبق استراتيجية <b>"الضيف التقيل"</b> (ابدأ بالعنصر الأقل تكراراً). 😉</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-6 mb-8">
+                <h4 class="font-bold text-center mb-4">مثال عملي: تفاعل النيتروجين مع الهيدروجين</h4>
+
+                <div class="bg-black/40 p-4 rounded-xl text-center font-mono text-lg mb-4">
+                    N₂ + H₂ → NH₃
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 text-sm text-slate-300 text-center mb-4">
+                    <div>
+                        <p class="text-indigo-400 font-bold">المتفاعلات (يسار)</p>
+                        <p>N: 2</p>
+                        <p>H: 2</p>
                     </div>
                     <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-purple-400">أولاً: ما هي المعادلة الكيميائية؟</h3>
-                        <p class="text-xs text-gray-400">Chemical Equation</p>
+                        <p class="text-indigo-400 font-bold">النواتج (يمين)</p>
+                        <p>N: 1 ❌</p>
+                        <p>H: 3 ❌</p>
                     </div>
                 </div>
-                
-                <!-- Definition -->
-                <div class="concept-card rounded-xl p-5 mb-6">
-                    <h4 class="font-bold text-purple-400 mb-3 flex items-center gap-2">
-                        <span>📖</span> التعريف
-                    </h4>
-                    <p class="text-gray-200 leading-relaxed mb-4">
-                        المعادلة الكيميائية هي <strong class="text-yellow-400">طريقة مختصرة للتعبير عن التفاعل الكيميائي</strong> 
-                        باستخدام رموز وصيغ العناصر والمركبات.
-                    </p>
-                    <div class="bg-black/30 rounded-lg p-4 text-center">
-                        <p class="text-lg mb-2">مثال:</p>
-                        <div class="equation-box">
-                            <span class="element">H<span class="subscript">2</span></span>
-                            <span class="plus">+</span>
-                            <span class="element">O<span class="subscript">2</span></span>
-                            <span class="arrow">→</span>
-                            <span class="element">H<span class="subscript">2</span>O</span>
-                        </div>
-                        <p class="text-xs text-gray-400 mt-2">هيدروجين + أكسجين → ماء</p>
+
+                <div class="bg-green-900/20 border border-green-500/30 p-4 rounded-xl text-center">
+                    <p class="text-green-400 font-bold mb-2">الحل الموزون ✅</p>
+                    <div class="equation-box text-xl">
+                        N₂ + <span class="text-yellow-400 font-bold">3</span>H₂ → <span
+                            class="text-yellow-400 font-bold">2</span>NH₃
                     </div>
+                    <p class="text-xs text-slate-400 mt-2">دلوقتي: N=2, H=6 في الطرفين!</p>
                 </div>
-                
-                <!-- Visual Diagram -->
-                <div class="diagram-container">
-                    <h4 class="font-bold text-center text-purple-400 mb-4">🎬 شوف التفاعل الكيميائي!</h4>
-                    <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
-                        <!-- Reactants -->
-                        <div class="text-center reactant-animate">
-                            <p class="text-sm text-gray-400 mb-2">المتفاعلات (Reactants)</p>
-                            <div class="flex items-center gap-2">
-                                <div class="molecule bg-blue-500/30 border border-blue-500">
-                                    <div class="atom-circle bg-blue-500 text-white">H</div>
-                                    <div class="atom-circle bg-blue-500 text-white">H</div>
-                                </div>
-                                <span class="text-2xl text-blue-400">+</span>
-                                <div class="molecule bg-red-500/30 border border-red-500">
-                                    <div class="atom-circle bg-red-500 text-white">O</div>
-                                    <div class="atom-circle bg-red-500 text-white">O</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Arrow -->
-                        <div class="text-4xl text-yellow-400 arrow-animate">⟸</div>
-                        
-                        <!-- Products -->
-                        <div class="text-center product-animate">
-                            <p class="text-sm text-gray-400 mb-2">النواتج (Products)</p>
-                            <div class="molecule bg-green-500/30 border border-green-500">
-                                <div class="atom-circle bg-blue-500 text-white">H</div>
-                                <div class="atom-circle bg-red-500 text-white">O</div>
-                                <div class="atom-circle bg-blue-500 text-white">H</div>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-center text-gray-400 text-sm mt-4">
-                        ⚡ الهيدروجين والأكسجين بيتحدوا وبيكونوا الماء!
-                    </p>
-                </div>
-                
-                <!-- Key Terms -->
-                <div class="grid sm:grid-cols-2 gap-4 mb-6">
-                    <div class="success-card rounded-xl p-4">
-                        <h5 class="font-bold text-green-400 mb-2 flex items-center gap-2">
-                            <span>📥</span> المتفاعلات (Reactants)
-                        </h5>
-                        <p class="text-gray-300 text-sm">
-                            المواد اللي بتدخل في التفاعل وبتتحول لمواد تانية. بتكون <strong class="text-yellow-400">قبل السهم</strong> (على اليسار في المعادلة المكتوبة بالإنجليزي).
-                        </p>
-                    </div>
-                    <div class="success-card rounded-xl p-4">
-                        <h5 class="font-bold text-green-400 mb-2 flex items-center gap-2">
-                            <span>📤</span> النواتج (Products)
-                        </h5>
-                        <p class="text-gray-300 text-sm">
-                            المواد الجديدة اللي بتتكون من التفاعل. بتكون <strong class="text-yellow-400">بعد السهم</strong> (على اليمين في المعادلة المكتوبة بالإنجليزي).
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="teacher-bubble mr-0 sm:mr-12">
-                    <p class="text-white">
-                        <strong>💡 فكر فيها كده:</strong> المعادلة الكيميائية زي الوصفة! 
-                        المتفاعلات = المكونات، والنواتج = الأكلة النهائية! 🍳
-                    </p>
-                </div>
-                
-                <!-- محاورة تفاعلية -->
-                <div class="mt-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl p-4 border border-blue-500/20">
-                    <div class="flex items-start gap-3 mb-4">
-                        <div class="text-3xl">🙋‍♂️</div>
-                        <div class="bg-blue-500/20 rounded-xl p-3 flex-1">
-                            <p class="text-sm text-blue-400 font-bold mb-1">الطالب بيسأل:</p>
-                            <p class="text-gray-200">"يعني إيه المادة بتتحول؟ هي بتختفي ولا إيه؟"</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 mr-8">
-                        <div class="text-3xl">👨‍🏫</div>
-                        <div class="bg-green-500/20 rounded-xl p-3 flex-1">
-                            <p class="text-sm text-green-400 font-bold mb-1">مصطفى هاني:</p>
-                            <p class="text-gray-200">سؤال ممتاز! المادة مش بتختفي خالص - دي قانون حفظ الكتلة! الذرات بتتعاد ترتيبها بس. يعني لو عندك 10 ذرات هيدروجين قبل التفاعل، هيفضلوا 10 بعده، بس هيكونوا مترتبين بشكل مختلف! 🔄</p>
-                        </div>
-                    </div>
-                </div>
+            </div>
+
+            <!-- Quiz 2 -->
+            <div class="glass-panel p-6 mt-6 border-green-500/30">
+                <h4 class="font-bold text-green-400 mb-4">🧠 تحدي الوزن!</h4>
+                <div id="quiz-balancing"></div>
             </div>
         </section>
 
-        <!-- ==================== SECTION 2: CONDITIONS ==================== -->
-        <section id="conditions" class="mb-12">
-            <div class="glass-card rounded-2xl p-6">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-2xl">
-                        ✅
-                    </div>
-                    <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-blue-400">ثانياً: شروط كتابة المعادلة الكيميائية</h3>
-                        <p class="text-xs text-gray-400">Conditions for Writing Chemical Equations</p>
-                    </div>
+        <!-- Types Section -->
+        <section id="types" class="mb-16">
+            <h3 class="text-2xl font-bold text-orange-400 mb-6 flex items-center gap-2">
+                <span class="text-3xl">4️⃣</span> أنواع التفاعلات
+            </h3>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="glass-panel p-4 hover:bg-slate-800/80 transition">
+                    <div class="text-3xl mb-2">🔗</div>
+                    <h4 class="font-bold text-indigo-400">1. الاتحاد المباشر</h4>
+                    <p class="text-xs text-slate-400 font-mono mt-1">A + B → AB</p>
+                    <p class="text-sm mt-2">مادتين أو أكتر بيتحدوا ويدوا مركب واحد.</p>
                 </div>
-                
-                <div class="teacher-bubble mb-6 mr-0 sm:mr-12">
-                    <p class="text-white">
-                        عشان تكتب معادلة كيميائية صح، لازم تتبع شروط معينة. تعالى نشوفهم! 📝
-                    </p>
+
+                <div class="glass-panel p-4 hover:bg-slate-800/80 transition">
+                    <div class="text-3xl mb-2">💥</div>
+                    <h4 class="font-bold text-red-400">2. الانحلال الحراري</h4>
+                    <p class="text-xs text-slate-400 font-mono mt-1">AB → A + B</p>
+                    <p class="text-sm mt-2">مركب واحد بيتفكك بالحرارة لمكوناته.</p>
                 </div>
-                
-                <!-- Condition 1 -->
-                <div class="step-card bg-gradient-to-r from-blue-500/10 to-transparent rounded-xl p-5 mb-4">
-                    <div class="step-number bg-gradient-to-br from-blue-500 to-blue-600 text-white">1</div>
-                    <h4 class="font-bold text-blue-400 mb-2">كتابة صيغ المتفاعلات والنواتج صحيحة</h4>
-                    <p class="text-gray-300 text-sm mb-3">
-                        لازم تكتب الصيغة الكيميائية الصحيحة لكل مادة. مثلاً:
-                    </p>
-                    <div class="bg-black/30 rounded-lg p-3">
-                        <ul class="text-sm space-y-1">
-                            <li>• الماء: <code class="text-green-400">H₂O</code> ✅ مش <code class="text-red-400">HO₂</code> ❌</li>
-                            <li>• ثاني أكسيد الكربون: <code class="text-green-400">CO₂</code> ✅</li>
-                            <li>• كلوريد الصوديوم: <code class="text-green-400">NaCl</code> ✅</li>
-                        </ul>
-                    </div>
+
+                <div class="glass-panel p-4 hover:bg-slate-800/80 transition">
+                    <div class="text-3xl mb-2">🥊</div>
+                    <h4 class="font-bold text-yellow-400">3. الإحلال البسيط</h4>
+                    <p class="text-xs text-slate-400 font-mono mt-1">A + BC → AC + B</p>
+                    <p class="text-sm mt-2">عنصر قوي بيطرد عنصر ضعيف ويقعد مكانه.</p>
                 </div>
-                
-                <!-- Condition 2 -->
-                <div class="step-card bg-gradient-to-r from-purple-500/10 to-transparent rounded-xl p-5 mb-4">
-                    <div class="step-number bg-gradient-to-br from-purple-500 to-purple-600 text-white">2</div>
-                    <h4 class="font-bold text-purple-400 mb-2">المتفاعلات قبل السهم والنواتج بعده</h4>
-                    <p class="text-gray-300 text-sm mb-3">
-                        دايماً بنكتب المتفاعلات الأول، وبعدين السهم، وبعدين النواتج:
-                    </p>
-                    <div class="equation-box">
-                        <span class="text-blue-400">Reactants</span>
-                        <span class="arrow">→</span>
-                        <span class="text-green-400">Products</span>
-                    </div>
-                    <p class="text-xs text-gray-400 mt-2 text-center">متفاعلات → نواتج</p>
+
+                <div class="glass-panel p-4 hover:bg-slate-800/80 transition">
+                    <div class="text-3xl mb-2">🔄</div>
+                    <h4 class="font-bold text-green-400">4. الإحلال المزدوج</h4>
+                    <p class="text-xs text-slate-400 font-mono mt-1">AB + CD → AD + CB</p>
+                    <p class="text-sm mt-2">تبادل أيونات بين مركبين (كل واحد بياخد اللي مع التاني).</p>
                 </div>
-                
-                <!-- Condition 3 -->
-                <div class="step-card bg-gradient-to-r from-green-500/10 to-transparent rounded-xl p-5 mb-4">
-                    <div class="step-number bg-gradient-to-br from-green-500 to-green-600 text-white">3</div>
-                    <h4 class="font-bold text-green-400 mb-2">استخدام علامة (+) بين المواد</h4>
-                    <p class="text-gray-300 text-sm mb-3">
-                        لو عندنا أكتر من متفاعل أو ناتج، بنحط (+) بينهم:
-                    </p>
-                    <div class="equation-box">
-                        <span class="element">H<span class="subscript">2</span></span>
-                        <span class="plus">+</span>
-                        <span class="element">Cl<span class="subscript">2</span></span>
-                        <span class="arrow">→</span>
-                        <span class="coefficient">2</span><span class="element">HCl</span>
-                    </div>
-                </div>
-                
-                <!-- Condition 4 -->
-                <div class="step-card bg-gradient-to-r from-yellow-500/10 to-transparent rounded-xl p-5 mb-4">
-                    <div class="step-number bg-gradient-to-br from-yellow-500 to-yellow-600 text-black">4</div>
-                    <h4 class="font-bold text-yellow-400 mb-2">كتابة الحالة الفيزيائية</h4>
-                    <p class="text-gray-300 text-sm mb-3">
-                        بنكتب حالة كل مادة بين قوسين صغيرين:
-                    </p>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                        <div class="bg-blue-500/20 rounded-lg p-2 text-center">
-                            <code class="text-blue-400">(s)</code>
-                            <p class="text-xs text-gray-400">صلب Solid</p>
-                        </div>
-                        <div class="bg-cyan-500/20 rounded-lg p-2 text-center">
-                            <code class="text-cyan-400">(l)</code>
-                            <p class="text-xs text-gray-400">سائل Liquid</p>
-                        </div>
-                        <div class="bg-purple-500/20 rounded-lg p-2 text-center">
-                            <code class="text-purple-400">(g)</code>
-                            <p class="text-xs text-gray-400">غاز Gas</p>
-                        </div>
-                        <div class="bg-green-500/20 rounded-lg p-2 text-center">
-                            <code class="text-green-400">(aq)</code>
-                            <p class="text-xs text-gray-400">محلول مائي</p>
-                        </div>
-                    </div>
-                    <div class="equation-box text-sm">
-                        <span class="element">NaCl</span><sub>(s)</sub>
-                        <span class="arrow">→</span>
-                        <span class="element">Na</span><sup>+</sup><sub>(aq)</sub>
-                        <span class="plus">+</span>
-                        <span class="element">Cl</span><sup>-</sup><sub>(aq)</sub>
-                    </div>
-                </div>
-                
-                <!-- Condition 5 -->
-                <div class="step-card bg-gradient-to-r from-red-500/10 to-transparent rounded-xl p-5 mb-4">
-                    <div class="step-number bg-gradient-to-br from-red-500 to-red-600 text-white">5</div>
-                    <h4 class="font-bold text-red-400 mb-2">كتابة شروط التفاعل فوق السهم</h4>
-                    <p class="text-gray-300 text-sm mb-3">
-                        لو التفاعل محتاج ظروف معينة، بنكتبها فوق السهم:
-                    </p>
-                    <div class="grid sm:grid-cols-2 gap-3">
-                        <div class="bg-black/30 rounded-lg p-3 text-center">
-                            <p class="text-xs text-gray-400 mb-1">تسخين (حرارة)</p>
-                            <code class="text-yellow-400">→ Δ أو → heat</code>
-                        </div>
-                        <div class="bg-black/30 rounded-lg p-3 text-center">
-                            <p class="text-xs text-gray-400 mb-1">ضغط عالي</p>
-                            <code class="text-yellow-400">→ pressure</code>
-                        </div>
-                        <div class="bg-black/30 rounded-lg p-3 text-center">
-                            <p class="text-xs text-gray-400 mb-1">عامل حفاز</p>
-                            <code class="text-yellow-400">→ catalyst</code>
-                        </div>
-                        <div class="bg-black/30 rounded-lg p-3 text-center">
-                            <p class="text-xs text-gray-400 mb-1">ضوء</p>
-                            <code class="text-yellow-400">→ hν أو → light</code>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Condition 6 -->
-                <div class="step-card bg-gradient-to-r from-pink-500/10 to-transparent rounded-xl p-5 mb-6">
-                    <div class="step-number bg-gradient-to-br from-pink-500 to-pink-600 text-white">6</div>
-                    <h4 class="font-bold text-pink-400 mb-2">المعادلة لازم تكون موزونة!</h4>
-                    <p class="text-gray-300 text-sm mb-3">
-                        <strong class="text-yellow-400">أهم شرط!</strong> عدد ذرات كل عنصر لازم يكون متساوي في الطرفين.
-                        ده بناءً على <strong class="text-green-400">قانون حفظ الكتلة</strong>.
-                    </p>
-                    <div class="warning-card rounded-lg p-3">
-                        <p class="text-sm text-yellow-400 font-bold mb-1">⚠️ قانون حفظ الكتلة:</p>
-                        <p class="text-xs text-gray-300">"المادة لا تفنى ولا تُستحدث، ولكن تتحول من شكل لآخر"</p>
-                    </div>
-                </div>
-                
-                <!-- Quiz Section -->
-                <div class="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-xl p-5">
-                    <h4 class="font-bold text-blue-400 mb-4 flex items-center gap-2">
-                        <span>❓</span> اختبر نفسك - شروط الكتابة
-                    </h4>
-                    <div id="quiz-conditions"></div>
-                </div>
+            </div>
+
+            <!-- Quiz 3 -->
+            <div class="glass-panel p-6 mt-6 border-orange-500/30">
+                <h4 class="font-bold text-orange-400 mb-4">🧠 اختبر نفسك في الأنواع</h4>
+                <div id="quiz-types"></div>
             </div>
         </section>
 
-        <!-- ==================== SECTION 3: BALANCING ==================== -->
-        <section id="balancing" class="mb-12">
-            <div class="glass-card rounded-2xl p-6">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-2xl">
-                        ⚖️
-                    </div>
-                    <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-green-400">ثالثاً: وزن المعادلات الكيميائية</h3>
-                        <p class="text-xs text-gray-400">Balancing Chemical Equations</p>
-                    </div>
-                </div>
-                
-                <div class="concept-card rounded-xl p-5 mb-6">
-                    <h4 class="font-bold text-green-400 mb-3">📖 ليه بنوزن المعادلة؟</h4>
-                    <p class="text-gray-200 leading-relaxed">
-                        عشان نحقق <strong class="text-yellow-400">قانون حفظ الكتلة</strong>! 
-                        يعني عدد ذرات كل عنصر قبل التفاعل لازم يساوي عددها بعد التفاعل.
-                    </p>
-                </div>
-                
-                <div class="teacher-bubble mb-6 mr-0 sm:mr-12">
-                    <p class="text-white">
-                        <strong>🎯 القاعدة الذهبية:</strong> لما نوزن المعادلة، بنغير 
-                        <strong class="text-yellow-300">المعاملات (الأرقام قدام الصيغة)</strong> 
-                        ومش بنغير الأرقام جوه الصيغة نفسها!
-                    </p>
-                </div>
-                
-                <!-- Step by Step -->
-                <div class="mb-6">
-                    <h4 class="font-bold text-green-400 mb-4 flex items-center gap-2">
-                        <span>📝</span> خطوات وزن المعادلة
-                    </h4>
-                    
-                    <div class="space-y-4">
-                        <div class="step-card bg-gradient-to-r from-green-500/10 to-transparent rounded-xl p-5">
-                            <div class="step-number bg-gradient-to-br from-green-500 to-green-600 text-white">1</div>
-                            <h5 class="font-bold text-green-400 mb-2">اكتب المعادلة غير الموزونة</h5>
-                            <div class="equation-box">
-                                <span class="element">H<span class="subscript">2</span></span>
-                                <span class="plus">+</span>
-                                <span class="element">O<span class="subscript">2</span></span>
-                                <span class="arrow">→</span>
-                                <span class="element">H<span class="subscript">2</span>O</span>
-                            </div>
-                        </div>
-                        
-                        <div class="step-card bg-gradient-to-r from-blue-500/10 to-transparent rounded-xl p-5">
-                            <div class="step-number bg-gradient-to-br from-blue-500 to-blue-600 text-white">2</div>
-                            <h5 class="font-bold text-blue-400 mb-2">عدّ ذرات كل عنصر في الطرفين</h5>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-black/30 rounded-lg p-3">
-                                    <p class="text-sm text-blue-400 font-bold mb-2">قبل التفاعل:</p>
-                                    <p class="text-sm">H = <span class="text-yellow-400">2</span> ذرة</p>
-                                    <p class="text-sm">O = <span class="text-yellow-400">2</span> ذرة</p>
-                                </div>
-                                <div class="bg-black/30 rounded-lg p-3">
-                                    <p class="text-sm text-green-400 font-bold mb-2">بعد التفاعل:</p>
-                                    <p class="text-sm">H = <span class="text-yellow-400">2</span> ذرة</p>
-                                    <p class="text-sm">O = <span class="text-red-400">1</span> ذرة ❌</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="step-card bg-gradient-to-r from-yellow-500/10 to-transparent rounded-xl p-5">
-                            <div class="step-number bg-gradient-to-br from-yellow-500 to-yellow-600 text-black">3</div>
-                            <h5 class="font-bold text-yellow-400 mb-2">اضبط المعاملات لتوازن الذرات</h5>
-                            <p class="text-gray-300 text-sm mb-3">
-                                الأكسجين مش متساوي! نحط 2 قدام H₂O:
-                            </p>
-                            <div class="equation-box mb-3">
-                                <span class="element">H<span class="subscript">2</span></span>
-                                <span class="plus">+</span>
-                                <span class="element">O<span class="subscript">2</span></span>
-                                <span class="arrow">→</span>
-                                <span class="coefficient">2</span><span class="element">H<span class="subscript">2</span>O</span>
-                            </div>
-                            <p class="text-gray-300 text-sm">
-                                دلوقتي O متساوي (2=2) ✅ بس H مش متساوي (2≠4) ❌
-                            </p>
-                        </div>
-                        
-                        <div class="step-card bg-gradient-to-r from-purple-500/10 to-transparent rounded-xl p-5">
-                            <div class="step-number bg-gradient-to-br from-purple-500 to-purple-600 text-white">4</div>
-                            <h5 class="font-bold text-purple-400 mb-2">كمّل التوازن</h5>
-                            <p class="text-gray-300 text-sm mb-3">
-                                نحط 2 قدام H₂ عشان H يبقى 4 في الطرفين:
-                            </p>
-                            <div class="equation-box">
-                                <span class="coefficient">2</span><span class="element">H<span class="subscript">2</span></span>
-                                <span class="plus">+</span>
-                                <span class="element">O<span class="subscript">2</span></span>
-                                <span class="arrow">→</span>
-                                <span class="coefficient">2</span><span class="element">H<span class="subscript">2</span>O</span>
-                            </div>
-                        </div>
-                        
-                        <div class="step-card bg-gradient-to-r from-green-500/10 to-transparent rounded-xl p-5">
-                            <div class="step-number bg-gradient-to-br from-green-500 to-green-600 text-white">5</div>
-                            <h5 class="font-bold text-green-400 mb-2">تأكد من التوازن ✓</h5>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-green-500/20 rounded-lg p-3">
-                                    <p class="text-sm text-green-400 font-bold mb-2">قبل التفاعل:</p>
-                                    <p class="text-sm">H = <span class="text-green-400">4</span> ذرة ✅</p>
-                                    <p class="text-sm">O = <span class="text-green-400">2</span> ذرة ✅</p>
-                                </div>
-                                <div class="bg-green-500/20 rounded-lg p-3">
-                                    <p class="text-sm text-green-400 font-bold mb-2">بعد التفاعل:</p>
-                                    <p class="text-sm">H = <span class="text-green-400">4</span> ذرة ✅</p>
-                                    <p class="text-sm">O = <span class="text-green-400">2</span> ذرة ✅</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Balancing Animation -->
-                <div class="diagram-container mb-6">
-                    <h4 class="font-bold text-center text-green-400 mb-4">🎬 شوف الوزن بالحركة!</h4>
-                    <div class="flex flex-col items-center gap-4">
-                        <!-- Before Balancing -->
-                        <div class="bg-red-500/20 border border-red-500/50 rounded-xl p-4 w-full max-w-lg">
-                            <p class="text-center text-red-400 font-bold mb-3">❌ قبل الوزن (غير موزونة)</p>
-                            <div class="flex items-center justify-center gap-2 flex-wrap">
-                                <div class="flex gap-1">
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                </div>
-                                <span class="text-xl">+</span>
-                                <div class="flex gap-1">
-                                    <div class="atom-circle bg-red-500 text-white text-xs">O</div>
-                                    <div class="atom-circle bg-red-500 text-white text-xs">O</div>
-                                </div>
-                                <span class="text-xl">→</span>
-                                <div class="flex gap-1">
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                    <div class="atom-circle bg-red-500 text-white text-xs">O</div>
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                </div>
-                            </div>
-                            <p class="text-center text-xs text-gray-400 mt-2">H: 2→2 ✅ | O: 2→1 ❌</p>
-                        </div>
-                        
-                        <div class="text-3xl arrow-animate">⬇️</div>
-                        
-                        <!-- After Balancing -->
-                        <div class="bg-green-500/20 border border-green-500/50 rounded-xl p-4 w-full max-w-lg">
-                            <p class="text-center text-green-400 font-bold mb-3">✅ بعد الوزن (موزونة)</p>
-                            <div class="flex items-center justify-center gap-2 flex-wrap">
-                                <div class="flex gap-1">
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                </div>
-                                <div class="flex gap-1">
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                </div>
-                                <span class="text-xl">+</span>
-                                <div class="flex gap-1">
-                                    <div class="atom-circle bg-red-500 text-white text-xs">O</div>
-                                    <div class="atom-circle bg-red-500 text-white text-xs">O</div>
-                                </div>
-                                <span class="text-xl">→</span>
-                                <div class="flex gap-1">
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                    <div class="atom-circle bg-red-500 text-white text-xs">O</div>
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                </div>
-                                <div class="flex gap-1">
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                    <div class="atom-circle bg-red-500 text-white text-xs">O</div>
-                                    <div class="atom-circle bg-blue-500 text-white text-xs">H</div>
-                                </div>
-                            </div>
-                            <p class="text-center text-xs text-gray-400 mt-2">H: 4→4 ✅ | O: 2→2 ✅</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- More Examples -->
-                <div class="mb-6">
-                    <h4 class="font-bold text-green-400 mb-4 flex items-center gap-2">
-                        <span>📚</span> أمثلة محلولة
-                    </h4>
-                    
-                    <div class="space-y-4">
-                        <!-- Example 1 -->
-                        <div class="bg-black/30 rounded-xl p-4">
-                            <p class="text-yellow-400 font-bold mb-2">مثال 1: احتراق الميثان</p>
-                            <p class="text-sm text-gray-400 mb-2">غير موزونة:</p>
-                            <div class="equation-box text-sm mb-2">
-                                CH₄ + O₂ → CO₂ + H₂O
-                            </div>
-                            <p class="text-sm text-gray-400 mb-2">موزونة:</p>
-                            <div class="equation-box text-sm">
-                                CH₄ + <span class="coefficient">2</span>O₂ → CO₂ + <span class="coefficient">2</span>H₂O
-                            </div>
-                            <p class="text-xs text-gray-500 mt-2">C: 1=1 ✅ | H: 4=4 ✅ | O: 4=4 ✅</p>
-                        </div>
-                        
-                        <!-- Example 2 -->
-                        <div class="bg-black/30 rounded-xl p-4">
-                            <p class="text-yellow-400 font-bold mb-2">مثال 2: تفاعل الصوديوم مع الماء</p>
-                            <p class="text-sm text-gray-400 mb-2">غير موزونة:</p>
-                            <div class="equation-box text-sm mb-2">
-                                Na + H₂O → NaOH + H₂
-                            </div>
-                            <p class="text-sm text-gray-400 mb-2">موزونة:</p>
-                            <div class="equation-box text-sm">
-                                <span class="coefficient">2</span>Na + <span class="coefficient">2</span>H₂O → <span class="coefficient">2</span>NaOH + H₂
-                            </div>
-                            <p class="text-xs text-gray-500 mt-2">Na: 2=2 ✅ | H: 4=4 ✅ | O: 2=2 ✅</p>
-                        </div>
-                        
-                        <!-- Example 3 -->
-                        <div class="bg-black/30 rounded-xl p-4">
-                            <p class="text-yellow-400 font-bold mb-2">مثال 3: تفاعل الحديد مع الأكسجين</p>
-                            <p class="text-sm text-gray-400 mb-2">غير موزونة:</p>
-                            <div class="equation-box text-sm mb-2">
-                                Fe + O₂ → Fe₂O₃
-                            </div>
-                            <p class="text-sm text-gray-400 mb-2">موزونة:</p>
-                            <div class="equation-box text-sm">
-                                <span class="coefficient">4</span>Fe + <span class="coefficient">3</span>O₂ → <span class="coefficient">2</span>Fe₂O₃
-                            </div>
-                            <p class="text-xs text-gray-500 mt-2">Fe: 4=4 ✅ | O: 6=6 ✅</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Tips -->
-                <div class="success-card rounded-xl p-4 mb-6">
-                    <h5 class="font-bold text-green-400 mb-2 flex items-center gap-2">
-                        <span>💡</span> نصايح للوزن
-                    </h5>
-                    <ul class="text-gray-300 text-sm space-y-2">
-                        <li>• ابدأ بالعنصر اللي موجود في مركب واحد بس</li>
-                        <li>• سيب الهيدروجين والأكسجين للآخر</li>
-                        <li>• لو مش عارف، جرب بالأرقام 2, 3, 4...</li>
-                        <li>• دايماً تأكد بالعد في الآخر!</li>
-                    </ul>
-                </div>
-                
-                <!-- محاورة تفاعلية -->
-                <div class="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl p-4 border border-yellow-500/20 mb-6">
-                    <div class="flex items-start gap-3 mb-4">
-                        <div class="text-3xl">🙋‍♂️</div>
-                        <div class="bg-yellow-500/20 rounded-xl p-3 flex-1">
-                            <p class="text-sm text-yellow-400 font-bold mb-1">الطالب بيسأل:</p>
-                            <p class="text-gray-200">"طب ليه مش بنغير الأرقام الصغيرة اللي تحت؟ مش أسهل؟"</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 mr-8">
-                        <div class="text-3xl">👨‍🏫</div>
-                        <div class="bg-green-500/20 rounded-xl p-3 flex-1">
-                            <p class="text-sm text-green-400 font-bold mb-1">مصطفى هاني:</p>
-                            <p class="text-gray-200">سؤال مهم جداً! 👏 الأرقام الصغيرة (اللي تحت) دي بتوصف المادة نفسها. يعني H₂O معناها جزيء الماء (2 هيدروجين + 1 أكسجين). لو غيرتها هتبقى مادة تانية خالص! 😱 إنما المعاملات (الأرقام الكبيرة قدام) دي بتقول عندنا كام جزيء من المادة دي.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 mt-4">
-                        <div class="text-3xl">🙋‍♂️</div>
-                        <div class="bg-yellow-500/20 rounded-xl p-3 flex-1">
-                            <p class="text-sm text-yellow-400 font-bold mb-1">الطالب:</p>
-                            <p class="text-gray-200">"آه فهمت! يعني 2H₂O معناها 2 جزيء ماء، مش ماء مختلف!"</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 mr-8 mt-4">
-                        <div class="text-3xl">👨‍🏫</div>
-                        <div class="bg-green-500/20 rounded-xl p-3 flex-1">
-                            <p class="text-sm text-green-400 font-bold mb-1">مصطفى هاني:</p>
-                            <p class="text-gray-200">بالظبط كده! 🎯 برافو عليك!</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Quiz Section -->
-                <div class="bg-gradient-to-r from-green-500/20 to-teal-500/20 rounded-xl p-5">
-                    <h4 class="font-bold text-green-400 mb-4 flex items-center gap-2">
-                        <span>❓</span> اختبر نفسك - وزن المعادلات
-                    </h4>
-                    <div id="quiz-balancing"></div>
-                </div>
-            </div>
-        </section>
+        <!-- Final Exam -->
+        <section id="final-quiz" class="mb-20">
+            <div class="glass-panel border-yellow-500/30 p-8 text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-yellow-500/5 z-0"></div>
+                <div class="relative z-10">
+                    <h3 class="text-3xl font-black text-yellow-400 mb-4">🏆 الاختبار النهائي</h3>
+                    <p class="text-slate-300 mb-8 max-w-lg mx-auto">جمعتلك أسئلة من امتحانات السنين اللي فاتت. لو قفلت
+                        الامتحان ده، يبقى أنت برنس في المعادلة الكيميائية! 👑</p>
 
-        <!-- ==================== SECTION 4: TYPES OF REACTIONS ==================== -->
-        <section id="types" class="mb-12">
-            <div class="glass-card rounded-2xl p-6">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl">
-                        🔄
-                    </div>
-                    <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-orange-400">رابعاً: أنواع التفاعلات الكيميائية</h3>
-                        <p class="text-xs text-gray-400">Types of Chemical Reactions</p>
-                    </div>
-                </div>
-                
-                <div class="teacher-bubble mb-6 mr-0 sm:mr-12">
-                    <p class="text-white">
-                        في أنواع كتير للتفاعلات الكيميائية! تعالى نتعرف على أهمها 🔬
-                    </p>
-                </div>
-                
-                <!-- Type 1: Combination -->
-                <div class="mb-6">
-                    <div class="bg-gradient-to-r from-blue-500/20 to-blue-600/10 rounded-xl p-5 border border-blue-500/30">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-3xl">🔗</span>
-                            <h4 class="font-bold text-blue-400 text-lg">1. تفاعلات الاتحاد (التكوين)</h4>
-                        </div>
-                        <p class="text-gray-300 text-sm mb-3">
-                            مادتين أو أكتر بيتحدوا وبيكونوا مادة واحدة جديدة.
-                        </p>
-                        <div class="bg-black/30 rounded-lg p-3 mb-3">
-                            <p class="text-center text-sm mb-2">الصيغة العامة:</p>
-                            <div class="equation-box">
-                                A + B → AB
-                            </div>
-                        </div>
-                        <div class="bg-black/30 rounded-lg p-3">
-                            <p class="text-yellow-400 text-sm mb-1">مثال:</p>
-                            <div class="equation-box text-sm">
-                                <span class="coefficient">2</span>Mg + O₂ → <span class="coefficient">2</span>MgO
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1">ماغنسيوم + أكسجين → أكسيد ماغنسيوم</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Type 2: Decomposition -->
-                <div class="mb-6">
-                    <div class="bg-gradient-to-r from-red-500/20 to-red-600/10 rounded-xl p-5 border border-red-500/30">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-3xl">💥</span>
-                            <h4 class="font-bold text-red-400 text-lg">2. تفاعلات التحلل (التفكك)</h4>
-                        </div>
-                        <p class="text-gray-300 text-sm mb-3">
-                            مادة واحدة بتتحلل وبتدي مادتين أو أكتر.
-                        </p>
-                        <div class="bg-black/30 rounded-lg p-3 mb-3">
-                            <p class="text-center text-sm mb-2">الصيغة العامة:</p>
-                            <div class="equation-box">
-                                AB → A + B
-                            </div>
-                        </div>
-                        <div class="bg-black/30 rounded-lg p-3">
-                            <p class="text-yellow-400 text-sm mb-1">مثال:</p>
-                            <div class="equation-box text-sm">
-                                <span class="coefficient">2</span>H₂O → <span class="coefficient">2</span>H₂ + O₂
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1">ماء → هيدروجين + أكسجين (بالتحليل الكهربي)</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Type 3: Single Replacement -->
-                <div class="mb-6">
-                    <div class="bg-gradient-to-r from-green-500/20 to-green-600/10 rounded-xl p-5 border border-green-500/30">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-3xl">🔀</span>
-                            <h4 class="font-bold text-green-400 text-lg">3. تفاعلات الإحلال البسيط</h4>
-                        </div>
-                        <p class="text-gray-300 text-sm mb-3">
-                            عنصر نشط بيحل محل عنصر أقل نشاطاً في مركب.
-                        </p>
-                        <div class="bg-black/30 rounded-lg p-3 mb-3">
-                            <p class="text-center text-sm mb-2">الصيغة العامة:</p>
-                            <div class="equation-box">
-                                A + BC → AC + B
-                            </div>
-                        </div>
-                        <div class="bg-black/30 rounded-lg p-3">
-                            <p class="text-yellow-400 text-sm mb-1">مثال:</p>
-                            <div class="equation-box text-sm">
-                                Zn + CuSO₄ → ZnSO₄ + Cu
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1">خارصين + كبريتات نحاس → كبريتات خارصين + نحاس</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Type 4: Double Replacement -->
-                <div class="mb-6">
-                    <div class="bg-gradient-to-r from-purple-500/20 to-purple-600/10 rounded-xl p-5 border border-purple-500/30">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-3xl">🔄</span>
-                            <h4 class="font-bold text-purple-400 text-lg">4. تفاعلات الإحلال المزدوج</h4>
-                        </div>
-                        <p class="text-gray-300 text-sm mb-3">
-                            مركبين بيتبادلوا الأيونات وبيكونوا مركبين جداد.
-                        </p>
-                        <div class="bg-black/30 rounded-lg p-3 mb-3">
-                            <p class="text-center text-sm mb-2">الصيغة العامة:</p>
-                            <div class="equation-box">
-                                AB + CD → AD + CB
-                            </div>
-                        </div>
-                        <div class="bg-black/30 rounded-lg p-3">
-                            <p class="text-yellow-400 text-sm mb-1">مثال:</p>
-                            <div class="equation-box text-sm">
-                                NaCl + AgNO₃ → NaNO₃ + AgCl↓
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1">كلوريد صوديوم + نترات فضة → نترات صوديوم + كلوريد فضة</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Type 5: Combustion -->
-                <div class="mb-6">
-                    <div class="bg-gradient-to-r from-orange-500/20 to-orange-600/10 rounded-xl p-5 border border-orange-500/30">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-3xl">🔥</span>
-                            <h4 class="font-bold text-orange-400 text-lg">5. تفاعلات الاحتراق</h4>
-                        </div>
-                        <p class="text-gray-300 text-sm mb-3">
-                            مادة بتتفاعل مع الأكسجين وبتنتج طاقة (حرارة وضوء).
-                        </p>
-                        <div class="bg-black/30 rounded-lg p-3">
-                            <p class="text-yellow-400 text-sm mb-1">مثال:</p>
-                            <div class="equation-box text-sm">
-                                CH₄ + <span class="coefficient">2</span>O₂ → CO₂ + <span class="coefficient">2</span>H₂O + طاقة
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1">ميثان + أكسجين → ثاني أكسيد كربون + ماء + طاقة</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Summary Table -->
-                <div class="table-container mb-6">
-                    <h4 class="font-bold text-orange-400 mb-4">📊 ملخص أنواع التفاعلات</h4>
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="border-b border-white/20">
-                                <th class="text-right py-2 px-3 text-orange-400">النوع</th>
-                                <th class="text-right py-2 px-3 text-orange-400">الصيغة</th>
-                                <th class="text-right py-2 px-3 text-orange-400">مثال</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b border-white/10">
-                                <td class="py-2 px-3">🔗 اتحاد</td>
-                                <td class="py-2 px-3 text-blue-400">A + B → AB</td>
-                                <td class="py-2 px-3 text-xs">2Na + Cl₂ → 2NaCl</td>
-                            </tr>
-                            <tr class="border-b border-white/10">
-                                <td class="py-2 px-3">💥 تحلل</td>
-                                <td class="py-2 px-3 text-red-400">AB → A + B</td>
-                                <td class="py-2 px-3 text-xs">2KClO₃ → 2KCl + 3O₂</td>
-                            </tr>
-                            <tr class="border-b border-white/10">
-                                <td class="py-2 px-3">🔀 إحلال بسيط</td>
-                                <td class="py-2 px-3 text-green-400">A + BC → AC + B</td>
-                                <td class="py-2 px-3 text-xs">Fe + CuSO₄ → FeSO₄ + Cu</td>
-                            </tr>
-                            <tr class="border-b border-white/10">
-                                <td class="py-2 px-3">🔄 إحلال مزدوج</td>
-                                <td class="py-2 px-3 text-purple-400">AB + CD → AD + CB</td>
-                                <td class="py-2 px-3 text-xs">BaCl₂ + Na₂SO₄ → BaSO₄ + 2NaCl</td>
-                            </tr>
-                            <tr>
-                                <td class="py-2 px-3">🔥 احتراق</td>
-                                <td class="py-2 px-3 text-orange-400">مادة + O₂</td>
-                                <td class="py-2 px-3 text-xs">C + O₂ → CO₂</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Quiz Section -->
-                <div class="bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-xl p-5">
-                    <h4 class="font-bold text-orange-400 mb-4 flex items-center gap-2">
-                        <span>❓</span> اختبر نفسك - أنواع التفاعلات
-                    </h4>
-                    <div id="quiz-types"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== FINAL QUIZ ==================== -->
-        <section id="final-quiz" class="mb-12">
-            <div class="glass-card rounded-2xl p-6 border-2 border-yellow-500/50">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center text-2xl pulse-glow">
-                        🏆
-                    </div>
-                    <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-yellow-400">الاختبار النهائي</h3>
-                        <p class="text-xs text-gray-400">اختبر كل اللي اتعلمته!</p>
-                    </div>
-                </div>
-                
-                <div class="teacher-bubble mb-6 mr-0 sm:mr-12">
-                    <p class="text-white">
-                        برافو عليك! 👏 خلصت الدرس كله. 
-                        دلوقتي وقت الاختبار النهائي - <strong class="text-yellow-300">10 أسئلة</strong> من كل اللي درسناه.
-                        ركز وورينا شطارتك! 💪
-                    </p>
-                </div>
-                
-                <div id="final-quiz-container"></div>
-            </div>
-        </section>
-
-        <!-- ==================== SUMMARY ==================== -->
-        <section id="summary" class="mb-12">
-            <div class="glass-card rounded-2xl p-6">
-                <h3 class="text-xl sm:text-2xl font-bold text-center text-yellow-400 mb-6">📋 ملخص الدرس</h3>
-                
-                <div class="grid sm:grid-cols-2 gap-4">
-                    <div class="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4">
-                        <h4 class="font-bold text-purple-400 mb-2">📖 المعادلة الكيميائية</h4>
-                        <ul class="text-sm text-gray-300 space-y-1">
-                            <li>• طريقة مختصرة للتعبير عن التفاعل</li>
-                            <li>• <span dir="ltr">Reactants → Products</span></li>
-                            <li>• بتستخدم رموز العناصر</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
-                        <h4 class="font-bold text-blue-400 mb-2">✅ شروط الكتابة</h4>
-                        <ul class="text-sm text-gray-300 space-y-1">
-                            <li>• صيغ صحيحة</li>
-                            <li>• حالة فيزيائية</li>
-                            <li>• شروط التفاعل</li>
-                            <li>• لازم تكون موزونة</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
-                        <h4 class="font-bold text-green-400 mb-2">⚖️ وزن المعادلات</h4>
-                        <ul class="text-sm text-gray-300 space-y-1">
-                            <li>• بناءً على قانون حفظ الكتلة</li>
-                            <li>• نغير المعاملات بس</li>
-                            <li>• عدد الذرات متساوي</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-orange-500/10 border border-orange-500/30 rounded-xl p-4">
-                        <h4 class="font-bold text-orange-400 mb-2">🔄 أنواع التفاعلات</h4>
-                        <ul class="text-sm text-gray-300 space-y-1">
-                            <li>• اتحاد - تحلل</li>
-                            <li>• إحلال بسيط - مزدوج</li>
-                            <li>• احتراق</li>
-                        </ul>
-                    </div>
+                    <div id="final-quiz-container" class="max-w-2xl mx-auto"></div>
                 </div>
             </div>
         </section>
@@ -1172,462 +511,128 @@
     </main>
 
     <!-- Footer -->
-    <footer class="py-6 px-4 bg-black/30 border-t border-white/10">
-        <div class="container mx-auto max-w-4xl text-center">
-            <p class="text-yellow-400 font-bold mb-1">منصة الكيمياء مع مصطفى هاني 👨‍🏫</p>
-            <p class="text-gray-500 text-sm">ذاكر صح.. وافهم مش تحفظ! 💪</p>
-            <a href="index.html" class="inline-block mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-black px-6 py-2 rounded-full font-bold hover:scale-105 transition">
-                → الرجوع للمنصة
+    <footer class="glass-panel rounded-none border-x-0 border-b-0 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center items-center gap-2 mb-4">
+                <div class="text-2xl">👨‍🏫</div>
+                <h3
+                    class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                    منصة العباقرة</h3>
+            </div>
+            <p class="text-slate-400 text-sm mb-6">صُنعت بحب ❤️ لطلاب الصف الأول الثانوي</p>
+            <a href="index.html"
+                class="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-slate-800 hover:bg-slate-700 transition text-sm">
+                <span>🏠</span> العودة للصفحة الرئيسية
             </a>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script>
-        // ==================== QUESTION BANKS ====================
-        const questionBanks = {
+        // Quiz Data
+        const quizData = {
             conditions: [
-                {
-                    q: "أين تُكتب المتفاعلات في المعادلة الكيميائية؟",
-                    options: ["يمين السهم", "يسار السهم", "فوق السهم", "تحت السهم"],
-                    correct: 1,
-                    explanation: "المتفاعلات دايماً على يسار السهم، والنواتج على يمين السهم"
-                },
-                {
-                    q: "ما الرمز الذي يدل على الحالة الغازية؟",
-                    options: ["(s)", "(l)", "(g)", "(aq)"],
-                    correct: 2,
-                    explanation: "(g) اختصار لـ Gas يعني غاز"
-                },
-                {
-                    q: "ماذا يعني الرمز (aq)؟",
-                    options: ["صلب", "سائل", "غاز", "محلول مائي"],
-                    correct: 3,
-                    explanation: "(aq) اختصار لـ Aqueous يعني مذاب في الماء"
-                },
-                {
-                    q: "أين تُكتب شروط التفاعل مثل الحرارة؟",
-                    options: ["يسار السهم", "يمين السهم", "فوق السهم", "بين المتفاعلات"],
-                    correct: 2,
-                    explanation: "شروط التفاعل زي الحرارة والضغط بتتكتب فوق السهم"
-                },
-                {
-                    q: "ما العلامة المستخدمة بين المتفاعلات؟",
-                    options: ["=", "+", "-", "×"],
-                    correct: 1,
-                    explanation: "علامة (+) بتستخدم بين المواد سواء متفاعلات أو نواتج"
-                },
-                {
-                    q: "الرمز Δ يدل على:",
-                    options: ["ضغط", "ضوء", "حرارة", "عامل حفاز"],
-                    correct: 2,
-                    explanation: "Δ (دلتا) بتدل على التسخين أو الحرارة"
-                },
-                {
-                    q: "ما القانون الذي يُلزمنا بوزن المعادلة؟",
-                    options: ["قانون النسب الثابتة", "قانون حفظ الكتلة", "قانون أفوجادرو", "قانون الغاز المثالي"],
-                    correct: 1,
-                    explanation: "قانون حفظ الكتلة: المادة لا تفنى ولا تُستحدث"
-                },
-                {
-                    q: "الرمز (s) يدل على الحالة:",
-                    options: ["الصلبة", "السائلة", "الغازية", "المحلول"],
-                    correct: 0,
-                    explanation: "(s) اختصار لـ Solid يعني صلب"
-                },
-                {
-                    q: "ما الصيغة الصحيحة للماء؟",
-                    options: ["HO", "H₂O", "HO₂", "H₃O"],
-                    correct: 1,
-                    explanation: "صيغة الماء هي H₂O (ذرتين هيدروجين + ذرة أكسجين)"
-                },
-                {
-                    q: "عند كتابة معادلة كيميائية، نستخدم:",
-                    options: ["أسماء المواد بالعربي", "رموز وصيغ العناصر", "أرقام فقط", "حروف عشوائية"],
-                    correct: 1,
-                    explanation: "المعادلة الكيميائية بتستخدم رموز العناصر وصيغ المركبات"
-                },
-                {
-                    q: "ماذا يعني السهم (→) في المعادلة؟",
-                    options: ["يساوي", "ينتج أو يعطي", "زائد", "ناقص"],
-                    correct: 1,
-                    explanation: "السهم معناه 'ينتج' أو 'يتحول إلى'"
-                },
-                {
-                    q: "الرمز (l) يدل على:",
-                    options: ["صلب", "سائل", "غاز", "محلول"],
-                    correct: 1,
-                    explanation: "(l) اختصار لـ Liquid يعني سائل"
-                }
+                { q: "ما الرمز الذي يعبر عن المحلول المائي؟", options: ["(s)", "(l)", "(aq)", "(g)"], correct: 2, note: "(aq) اختصار Aqueous." },
+                { q: "أين تكتب شروط التفاعل؟", options: ["على اليمين", "على اليسار", "فوق السهم", "تحت النواتج"], correct: 2, note: "الحرارة والضغط والعوامل الحفازة فوق السهم." },
+                { q: "ما هو الشرط الأساسي للمعادلة الكيميائية؟", options: ["أن تكون طويلة", "أن تكون موزونة", "أن تكون ملونة", "أن تحتوي على غازات"], correct: 1, note: "تحقيقاً لقانون بقاء الكتلة." },
+                { q: "الرمز (s) يشير إلى الحالة:", options: ["الصلبة", "السائلة", "الغازية", "البخارية"], correct: 0, note: "(s) Solid يعني صلب." },
+                { q: "الغازات النشطة (مثل الأكسجين) تكتب في المعادلة:", options: ["O", "O₂", "O₃", "2O"], correct: 1, note: "لأنها جزيئات ثنائية الذرة." }
             ],
-            
             balancing: [
-                {
-                    q: "عند وزن المعادلة نغير:",
-                    options: ["الأرقام السفلية", "المعاملات (الأرقام أمام الصيغة)", "رموز العناصر", "نوع التفاعل"],
-                    correct: 1,
-                    explanation: "بنغير المعاملات بس (الأرقام قدام الصيغة) ومش الأرقام جوه الصيغة"
-                },
-                {
-                    q: "لوزن المعادلة: H₂ + O₂ → H₂O، المعامل أمام H₂O هو:",
-                    options: ["1", "2", "3", "4"],
-                    correct: 1,
-                    explanation: "2H₂ + O₂ → 2H₂O هي المعادلة الموزونة"
-                },
-                {
-                    q: "المعادلة الموزونة لـ: Na + Cl₂ → NaCl هي:",
-                    options: ["Na + Cl₂ → NaCl", "2Na + Cl₂ → 2NaCl", "Na + 2Cl₂ → 2NaCl", "2Na + Cl₂ → NaCl"],
-                    correct: 1,
-                    explanation: "2Na + Cl₂ → 2NaCl لأن Cl₂ فيها 2 كلور فمحتاجين 2NaCl"
-                },
-                {
-                    q: "في المعادلة الموزونة، عدد ذرات كل عنصر:",
-                    options: ["مختلف في الطرفين", "متساوي في الطرفين", "أكبر في النواتج", "أكبر في المتفاعلات"],
-                    correct: 1,
-                    explanation: "في المعادلة الموزونة عدد الذرات متساوي في الطرفين"
-                },
-                {
-                    q: "وزن المعادلة: Fe + O₂ → Fe₂O₃",
-                    options: ["4Fe + 3O₂ → 2Fe₂O₃", "2Fe + O₂ → Fe₂O₃", "Fe + O₂ → Fe₂O₃", "3Fe + 2O₂ → Fe₂O₃"],
-                    correct: 0,
-                    explanation: "4Fe + 3O₂ → 2Fe₂O₃ لأن Fe: 4=4 و O: 6=6"
-                },
-                {
-                    q: "المعامل أمام O₂ في: CH₄ + O₂ → CO₂ + H₂O الموزونة:",
-                    options: ["1", "2", "3", "4"],
-                    correct: 1,
-                    explanation: "CH₄ + 2O₂ → CO₂ + 2H₂O"
-                },
-                {
-                    q: "أي معادلة موزونة؟",
-                    options: ["H₂ + O₂ → H₂O", "2H₂ + O₂ → 2H₂O", "H₂ + O₂ → 2H₂O", "2H₂ + O₂ → H₂O"],
-                    correct: 1,
-                    explanation: "2H₂ + O₂ → 2H₂O (H: 4=4, O: 2=2)"
-                },
-                {
-                    q: "لماذا نوزن المعادلة الكيميائية؟",
-                    options: ["لتسهيل القراءة", "لتطبيق قانون حفظ الكتلة", "لمعرفة نوع التفاعل", "لتحديد الحالة الفيزيائية"],
-                    correct: 1,
-                    explanation: "الوزن ضروري لتطبيق قانون حفظ الكتلة"
-                },
-                {
-                    q: "في المعادلة: N₂ + H₂ → NH₃، المعاملات الصحيحة:",
-                    options: ["1, 3, 2", "1, 2, 3", "2, 3, 1", "1, 1, 1"],
-                    correct: 0,
-                    explanation: "N₂ + 3H₂ → 2NH₃ (N: 2=2, H: 6=6)"
-                },
-                {
-                    q: "وزن: C + O₂ → CO₂",
-                    options: ["المعادلة موزونة أصلاً", "2C + O₂ → CO₂", "C + 2O₂ → CO₂", "2C + O₂ → 2CO₂"],
-                    correct: 0,
-                    explanation: "المعادلة موزونة! C:1=1, O:2=2"
-                },
-                {
-                    q: "وزن: Al + O₂ → Al₂O₃",
-                    options: ["2Al + O₂ → Al₂O₃", "4Al + 3O₂ → 2Al₂O₃", "Al + O₂ → Al₂O₃", "3Al + 2O₂ → Al₂O₃"],
-                    correct: 1,
-                    explanation: "4Al + 3O₂ → 2Al₂O₃ (Al: 4=4, O: 6=6)"
-                },
-                {
-                    q: "عدد ذرات الأكسجين في 3H₂O:",
-                    options: ["1", "2", "3", "6"],
-                    correct: 2,
-                    explanation: "3 جزيئات ماء × 1 ذرة أكسجين = 3 ذرات"
-                }
+                { q: "عشان نوزن المعادلة H₂ + O₂ → H₂O، المعامل الصحيح للماء هو:", options: ["1", "2", "3", "4"], correct: 1, note: "عشان يبقى 2 أكسجين يمين زي اليسار." },
+                { q: "مجموع المعاملات في المعادلة: N₂ + 3H₂ → 2NH₃ هو:", options: ["3", "5", "6", "4"], correct: 2, note: "1 + 3 + 2 = 6." },
+                { q: "أي المعادلات الآتية موزونة؟", options: ["H₂ + Cl₂ → HCl", "H₂ + Cl₂ → 2HCl", "2H₂ + Cl₂ → HCl", "H + Cl → HCl"], correct: 1, note: "ذرتين يمين وذرتين شمال." },
+                { q: "عند وزن المعادلة، نغير:", options: ["الصيغة الكيميائية", "المعاملات", "الحالة الفيزيائية", "شروط التفاعل"], correct: 1, note: "بنغير الأرقام اللي بره بس!" },
+                { q: "كم ذرة أكسجين في 3CO₂؟", options: ["3", "2", "5", "6"], correct: 3, note: "3 جزيئات × 2 ذرة = 6 ذرات." }
             ],
-            
             types: [
-                {
-                    q: "تفاعل A + B → AB يسمى تفاعل:",
-                    options: ["تحلل", "اتحاد", "إحلال بسيط", "إحلال مزدوج"],
-                    correct: 1,
-                    explanation: "تفاعل الاتحاد: مادتين أو أكتر بيتحدوا ويكونوا مادة واحدة"
-                },
-                {
-                    q: "تفاعل AB → A + B يسمى تفاعل:",
-                    options: ["اتحاد", "تحلل", "إحلال", "احتراق"],
-                    correct: 1,
-                    explanation: "تفاعل التحلل: مادة واحدة بتتفكك لمادتين أو أكتر"
-                },
-                {
-                    q: "نوع التفاعل: 2H₂O → 2H₂ + O₂",
-                    options: ["اتحاد", "تحلل", "إحلال بسيط", "احتراق"],
-                    correct: 1,
-                    explanation: "الماء بيتحلل للهيدروجين والأكسجين = تحلل"
-                },
-                {
-                    q: "نوع التفاعل: Zn + CuSO₄ → ZnSO₄ + Cu",
-                    options: ["اتحاد", "تحلل", "إحلال بسيط", "إحلال مزدوج"],
-                    correct: 2,
-                    explanation: "الخارصين حل محل النحاس = إحلال بسيط"
-                },
-                {
-                    q: "نوع التفاعل: NaCl + AgNO₃ → NaNO₃ + AgCl",
-                    options: ["اتحاد", "تحلل", "إحلال بسيط", "إحلال مزدوج"],
-                    correct: 3,
-                    explanation: "المركبين تبادلوا الأيونات = إحلال مزدوج"
-                },
-                {
-                    q: "تفاعل الاحتراق يتطلب وجود:",
-                    options: ["ماء", "أكسجين", "نيتروجين", "هيدروجين"],
-                    correct: 1,
-                    explanation: "الاحتراق = تفاعل المادة مع الأكسجين"
-                },
-                {
-                    q: "نوع التفاعل: CH₄ + 2O₂ → CO₂ + 2H₂O",
-                    options: ["اتحاد", "تحلل", "إحلال", "احتراق"],
-                    correct: 3,
-                    explanation: "الميثان بيتفاعل مع الأكسجين = احتراق"
-                },
-                {
-                    q: "نوع التفاعل: 2Mg + O₂ → 2MgO",
-                    options: ["تحلل", "اتحاد", "إحلال", "احتراق"],
-                    correct: 1,
-                    explanation: "الماغنسيوم والأكسجين اتحدوا = اتحاد (أو احتراق كمان!)"
-                },
-                {
-                    q: "في تفاعل الإحلال البسيط:",
-                    options: ["مادة تتحلل", "مادتين تتحدا", "عنصر يحل محل عنصر آخر", "مركبين يتبادلا"],
-                    correct: 2,
-                    explanation: "الإحلال البسيط: عنصر نشط بيحل محل عنصر أقل نشاطاً"
-                },
-                {
-                    q: "نوع التفاعل: 2KClO₃ → 2KCl + 3O₂",
-                    options: ["اتحاد", "تحلل", "إحلال", "احتراق"],
-                    correct: 1,
-                    explanation: "كلورات البوتاسيوم بتتحلل بالحرارة = تحلل"
-                },
-                {
-                    q: "أي تفاعل يُنتج طاقة (حرارة وضوء)؟",
-                    options: ["التحلل", "الاتحاد", "الاحتراق", "الإحلال"],
-                    correct: 2,
-                    explanation: "تفاعلات الاحتراق بتنتج طاقة (حرارة وضوء)"
-                },
-                {
-                    q: "صيغة تفاعل الإحلال المزدوج:",
-                    options: ["A + B → AB", "AB → A + B", "A + BC → AC + B", "AB + CD → AD + CB"],
-                    correct: 3,
-                    explanation: "AB + CD → AD + CB (تبادل الأيونات)"
-                }
+                { q: "تفاعل NH₃ + HCl → NH₄Cl يعتبر تفاعل:", options: ["انحلال", "اتحاد مباشر", "إحلال بسيط", "إحلال مزدوج"], correct: 1, note: "مادتين اتحدوا وكونوا مادة واحدة." },
+                { q: "تفكك نترات الصوديوم بالحرارة يعتبر:", options: ["اتحاد", "انحلال حراري", "إحلال", "أكسدة"], correct: 1, note: "مادة تفككت لمكوناتها بالحرارة." },
+                { q: "عندما يحل المغنسيوم محل الهيدروجين في الحمض، ده:", options: ["إحلال بسيط", "إحلال مزدوج", "اتحاد", "انحلال"], correct: 0, note: "عنصر نشط حل محل عنصر أقل نشاطاً." },
+                { q: "تفاعل التعادل (حمض + قاعدة) مثال على:", options: ["الاتحاد", "الانحلال", "الإحلال المزدوج", "الإحلال البسيط"], correct: 2, note: "تبادل أيونات!" }
             ]
         };
 
-        // ==================== QUIZ FUNCTIONS ====================
-        
-        function shuffleArray(array) {
-            const shuffled = [...array];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
-        }
+        // Quiz Logic
+        function renderQuiz(id, questions) {
+            const container = document.getElementById(id);
+            if (!container) return; // Guard clause
 
-        function getRandomQuestions(bank, count) {
-            const shuffled = shuffleArray(bank);
-            return shuffled.slice(0, count);
-        }
-
-        function createQuiz(containerId, questions, quizId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            let currentQuestion = 0;
-            let score = 0;
-            let answered = false;
-
-            function renderQuestion() {
-                const q = questions[currentQuestion];
-                container.innerHTML = `
-                    <div class="mb-4">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-sm text-gray-400">السؤال ${currentQuestion + 1} من ${questions.length}</span>
-                            <span class="text-sm text-yellow-400">الدرجة: ${score}/${questions.length}</span>
+            let html = '<div class="space-y-4">';
+            questions.forEach((q, idx) => {
+                html += `
+                    <div class="quiz-item" id="${id}-q${idx}">
+                        <p class="font-bold mb-3 text-slate-200">${idx + 1}. ${q.q}</p>
+                        <div class="grid grid-cols-1 gap-2">
+                            ${q.options.map((opt, i) => `
+                                <div onclick="checkAnswer('${id}', ${idx}, ${i}, ${q.correct})" 
+                                     class="quiz-option cursor-pointer p-3 rounded-lg border border-slate-700 bg-slate-800/50 hover:bg-slate-700 transition">
+                                     ${opt}
+                                </div>
+                            `).join('')}
                         </div>
-                        <div class="progress-bar h-2 mb-4">
-                            <div class="progress-fill" style="width: ${((currentQuestion) / questions.length) * 100}%"></div>
-                        </div>
-                    </div>
-                    <p class="text-lg font-bold mb-4">${q.q}</p>
-                    <div class="space-y-3" id="options-${quizId}">
-                        ${q.options.map((opt, i) => `
-                            <div class="quiz-option rounded-xl p-4 bg-white/5" onclick="selectOption('${quizId}', ${i}, ${q.correct})">
-                                <span class="font-bold text-gray-400 ml-2">${['أ', 'ب', 'ج', 'د'][i]}.</span>
-                                ${opt}
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div id="explanation-${quizId}" class="hidden mt-4 p-4 rounded-xl"></div>
-                    <button id="next-btn-${quizId}" class="hidden w-full mt-4 bg-gradient-to-r from-purple-500 to-indigo-500 py-3 rounded-xl font-bold hover:scale-[1.02] transition" onclick="nextQuestion('${quizId}')">
-                        ${currentQuestion < questions.length - 1 ? 'السؤال التالي ←' : 'عرض النتيجة 🏆'}
-                    </button>
-                `;
-                answered = false;
-            }
-
-            function showResult() {
-                const percentage = (score / questions.length) * 100;
-                let message, emoji, color;
-                
-                if (percentage >= 80) {
-                    message = "ممتاز! برافو عليك! 🎉";
-                    emoji = "🏆";
-                    color = "text-green-400";
-                    createConfetti();
-                } else if (percentage >= 60) {
-                    message = "جيد جداً! كمّل كده! 💪";
-                    emoji = "⭐";
-                    color = "text-yellow-400";
-                } else if (percentage >= 40) {
-                    message = "محتاج تراجع شوية! 📚";
-                    emoji = "📖";
-                    color = "text-orange-400";
-                } else {
-                    message = "راجع الدرس تاني وحاول! 💪";
-                    emoji = "🔄";
-                    color = "text-red-400";
-                }
-
-                container.innerHTML = `
-                    <div class="text-center py-6">
-                        <div class="text-6xl mb-4">${emoji}</div>
-                        <h4 class="text-2xl font-bold ${color} mb-2">${message}</h4>
-                        <p class="text-gray-300 mb-4">حصلت على ${score} من ${questions.length}</p>
-                        <div class="w-32 h-32 mx-auto mb-6 relative">
-                            <svg class="transform -rotate-90" viewBox="0 0 36 36">
-                                <path class="text-gray-700" stroke="currentColor" stroke-width="3" fill="none"
-                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                <path class="${color.replace('text', 'stroke')}" stroke="currentColor" stroke-width="3" fill="none"
-                                    stroke-dasharray="${percentage}, 100"
-                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                            </svg>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <span class="text-2xl font-bold">${Math.round(percentage)}%</span>
-                            </div>
-                        </div>
-                        <button onclick="restartQuiz('${quizId}')" class="bg-gradient-to-r from-yellow-500 to-orange-500 text-black px-8 py-3 rounded-xl font-bold hover:scale-105 transition">
-                            حاول تاني 🔄
-                        </button>
+                        <div id="${id}-feedback-${idx}" class="hidden mt-3 text-sm p-3 rounded-lg"></div>
                     </div>
                 `;
-            }
-
-            window[`quiz_${quizId}`] = {
-                questions,
-                currentQuestion: 0,
-                score: 0,
-                answered: false,
-                renderQuestion,
-                showResult,
-                containerId
-            };
-
-            renderQuestion();
-        }
-
-        function selectOption(quizId, selected, correct) {
-            const quiz = window[`quiz_${quizId}`];
-            if (quiz.answered) return;
-            quiz.answered = true;
-
-            const options = document.querySelectorAll(`#options-${quizId} .quiz-option`);
-            options.forEach((opt, i) => {
-                opt.style.pointerEvents = 'none';
-                if (i === correct) {
-                    opt.classList.add('correct');
-                } else if (i === selected && selected !== correct) {
-                    opt.classList.add('wrong');
-                }
             });
-
-            if (selected === correct) {
-                quiz.score++;
-            }
-
-            const explanationDiv = document.getElementById(`explanation-${quizId}`);
-            explanationDiv.classList.remove('hidden');
-            explanationDiv.className = `mt-4 p-4 rounded-xl ${selected === correct ? 'bg-green-500/20 border border-green-500/50' : 'bg-red-500/20 border border-red-500/50'}`;
-            explanationDiv.innerHTML = `
-                <p class="font-bold ${selected === correct ? 'text-green-400' : 'text-red-400'} mb-1">
-                    ${selected === correct ? '✓ إجابة صحيحة!' : '✗ إجابة خاطئة!'}
-                </p>
-                <p class="text-sm text-gray-300">${quiz.questions[quiz.currentQuestion].explanation}</p>
-            `;
-
-            document.getElementById(`next-btn-${quizId}`).classList.remove('hidden');
+            html += '</div>';
+            container.innerHTML = html;
         }
 
-        function nextQuestion(quizId) {
-            const quiz = window[`quiz_${quizId}`];
-            quiz.currentQuestion++;
-            
-            if (quiz.currentQuestion < quiz.questions.length) {
-                quiz.renderQuestion();
+        window.checkAnswer = function (quizId, questionIdx, selectedIdx, correctIdx) {
+            const feedbackEl = document.getElementById(`${quizId}-feedback-${questionIdx}`);
+            const questionContainer = document.getElementById(`${quizId}-q${questionIdx}`);
+            const options = questionContainer.querySelectorAll('.quiz-option');
+
+            // Disable clicks
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+
+            // Style options
+            options[selectedIdx].classList.add(selectedIdx === correctIdx ? 'bg-green-500/20' : 'bg-red-500/20');
+            options[selectedIdx].classList.add(selectedIdx === correctIdx ? 'border-green-500' : 'border-red-500');
+
+            if (selectedIdx !== correctIdx) {
+                options[correctIdx].classList.add('bg-green-500/20', 'border-green-500');
+            }
+
+            // Show Feedback
+            const data = quizId === 'final-quiz-container'
+                ? getAllQuestions()[questionIdx]
+                : quizData[quizId.replace('quiz-', '')][questionIdx];
+
+            feedbackEl.classList.remove('hidden');
+            if (selectedIdx === correctIdx) {
+                feedbackEl.classList.add('bg-green-500/20', 'text-green-300');
+                feedbackEl.innerText = `✅ ممتاز! ${data.note}`;
             } else {
-                quiz.showResult();
+                feedbackEl.classList.add('bg-red-500/20', 'text-red-300');
+                feedbackEl.innerText = `❌ خطأ. الإجابة الصح: ${data.options[correctIdx]}. \n💡 ${data.note}`;
             }
+        };
+
+        function getAllQuestions() {
+            // Flatten all questions for the final exam
+            return [...quizData.conditions, ...quizData.balancing, ...quizData.types];
         }
 
-        function restartQuiz(quizId) {
-            if (quizId === 'final-quiz') {
-                startFinalQuiz();
-            } else {
-                const bankName = quizId.replace('quiz-', '');
-                if (questionBanks[bankName]) {
-                    createQuiz(`quiz-${bankName}`, getRandomQuestions(questionBanks[bankName], 5), `quiz-${bankName}`);
-                }
-            }
-        }
-
-        // ==================== FINAL QUIZ ====================
-        
-        function startFinalQuiz() {
-            let allQuestions = [];
-            allQuestions = allQuestions.concat(getRandomQuestions(questionBanks.conditions, 3));
-            allQuestions = allQuestions.concat(getRandomQuestions(questionBanks.balancing, 4));
-            allQuestions = allQuestions.concat(getRandomQuestions(questionBanks.types, 3));
-            allQuestions = shuffleArray(allQuestions);
-            
-            createQuiz('final-quiz-container', allQuestions, 'final-quiz');
-        }
-
-        // ==================== CONFETTI ====================
-        
-        function createConfetti() {
-            const colors = ['#fbbf24', '#ef4444', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899'];
-            for (let i = 0; i < 100; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                    document.body.appendChild(confetti);
-                    setTimeout(() => confetti.remove(), 3000);
-                }, i * 30);
-            }
-        }
-
-        // ==================== SCROLL ====================
-        
-        function scrollToSection(sectionId) {
-            document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        window.addEventListener('scroll', () => {
-            const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = (scrollTop / docHeight) * 100;
-            document.getElementById('reading-progress').style.width = progress + '%';
-        });
-
-        // ==================== INITIALIZE ====================
-        
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            createQuiz('quiz-conditions', getRandomQuestions(questionBanks.conditions, 5), 'quiz-conditions');
-            createQuiz('quiz-balancing', getRandomQuestions(questionBanks.balancing, 5), 'quiz-balancing');
-            createQuiz('quiz-types', getRandomQuestions(questionBanks.types, 5), 'quiz-types');
-            startFinalQuiz();
+            renderQuiz('quiz-conditions', quizData.conditions);
+            renderQuiz('quiz-balancing', quizData.balancing);
+            renderQuiz('quiz-types', quizData.types);
+
+            // Final Quiz (Random Selection could be added here, but let's keep it simple for now)
+            renderQuiz('final-quiz-container', getAllQuestions());
+
+            // Scroll Progress
+            window.onscroll = () => {
+                let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                let scrolled = (winScroll / height) * 100;
+                document.getElementById("reading-progress").style.width = scrolled + "%";
+            };
         });
     </script>
 </body>
+
 </html>
